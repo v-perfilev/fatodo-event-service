@@ -1,6 +1,6 @@
-# Fatodo extended-mysql-skeleton
+# Fatodo event-service
 
-Spring app that is used for development of complex microservices with mysql.
+Spring app for event service.
 
 ## Tests
 

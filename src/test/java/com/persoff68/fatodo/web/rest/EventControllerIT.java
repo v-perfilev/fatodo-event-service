@@ -4,16 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoEventServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestChatEvent;
+import com.persoff68.fatodo.builder.TestChatEventDTO;
 import com.persoff68.fatodo.builder.TestChatEventUser;
+import com.persoff68.fatodo.builder.TestCommentEventDTO;
+import com.persoff68.fatodo.builder.TestContactEventDTO;
 import com.persoff68.fatodo.builder.TestEvent;
 import com.persoff68.fatodo.builder.TestEventDTO;
 import com.persoff68.fatodo.builder.TestEventRecipient;
+import com.persoff68.fatodo.builder.TestItemEventDTO;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.constant.EventType;
+import com.persoff68.fatodo.model.dto.ChatEventDTO;
+import com.persoff68.fatodo.model.dto.CommentEventDTO;
+import com.persoff68.fatodo.model.dto.ContactEventDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.dto.ItemEventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
@@ -134,6 +142,151 @@ class EventControllerIT {
                         .content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @Transactional
+    void testAddContactEvent_ok() throws Exception {
+        String url = ENDPOINT + "/contact";
+        ContactEventDTO dto = TestContactEventDTO.defaultBuilder()
+                .eventType(EventType.CONTACT_SEND)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated());
+
+        Page<Event> eventPage = eventRepository.findAllByUserId(UUID.fromString(USER_ID_2), Pageable.unpaged());
+        assertThat(eventPage).hasSize(1);
+
+        Event event = eventPage.getContent().get(0);
+        assertThat(event.getType()).isEqualTo(EventType.CONTACT_SEND);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testAddContactEvent_unauthorized() throws Exception {
+        String url = ENDPOINT + "/contact";
+        ContactEventDTO dto = TestContactEventDTO.defaultBuilder()
+                .eventType(EventType.CONTACT_SEND)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @Transactional
+    void testAddItemEvent_ok() throws Exception {
+        String url = ENDPOINT + "/item";
+        ItemEventDTO dto = TestItemEventDTO.defaultBuilder()
+                .eventType(EventType.ITEM_CREATE)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated());
+
+        Page<Event> eventPage = eventRepository.findAllByUserId(UUID.fromString(USER_ID_2), Pageable.unpaged());
+        assertThat(eventPage).hasSize(1);
+
+        Event event = eventPage.getContent().get(0);
+        assertThat(event.getType()).isEqualTo(EventType.ITEM_CREATE);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testAddItemEvent_unauthorized() throws Exception {
+        String url = ENDPOINT + "/item";
+        ItemEventDTO dto = TestItemEventDTO.defaultBuilder()
+                .eventType(EventType.ITEM_CREATE)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @Transactional
+    void testAddCommentEvent_ok() throws Exception {
+        String url = ENDPOINT + "/comment";
+        CommentEventDTO dto = TestCommentEventDTO.defaultBuilder()
+                .eventType(EventType.COMMENT_ADD)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated());
+
+        Page<Event> eventPage = eventRepository.findAllByUserId(UUID.fromString(USER_ID_2), Pageable.unpaged());
+        assertThat(eventPage).hasSize(1);
+
+        Event event = eventPage.getContent().get(0);
+        assertThat(event.getType()).isEqualTo(EventType.COMMENT_ADD);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testAddCommentEvent_unauthorized() throws Exception {
+        String url = ENDPOINT + "/comment";
+        CommentEventDTO dto = TestCommentEventDTO.defaultBuilder()
+                .eventType(EventType.COMMENT_ADD)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @Transactional
+    void testAddChatEvent_ok() throws Exception {
+        String url = ENDPOINT + "/chat";
+        ChatEventDTO dto = TestChatEventDTO.defaultBuilder()
+                .eventType(EventType.CHAT_CREATE)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated());
+
+        Page<Event> eventPage = eventRepository.findAllByUserId(UUID.fromString(USER_ID_2), Pageable.unpaged());
+        assertThat(eventPage).hasSize(1);
+
+        Event event = eventPage.getContent().get(0);
+        assertThat(event.getType()).isEqualTo(EventType.CHAT_CREATE);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testAddChatEvent_unauthorized() throws Exception {
+        String url = ENDPOINT + "/chat";
+        ChatEventDTO dto = TestChatEventDTO.defaultBuilder()
+                .eventType(EventType.CHAT_CREATE)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
 
     private Event buildChatEvent(String userId) {
         ChatEventUser chatEventUser = TestChatEventUser.defaultBuilder()

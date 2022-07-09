@@ -27,10 +27,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("""
             select count(e) from Event e
-            join EventRecipient r
-            where r.userId = : userId and e.createdAt > :from
+            join EventRecipient r on e.id = r.event.id
+            where r.userId = :userId and e.createdAt > :from
             """)
-    long countFromByUserId(@Param("from") UUID userId, @Param("from") Date from);
+    long countFromByUserId(@Param("userId") UUID userId, @Param("from") Date from);
 
     @Modifying
     @Query("""

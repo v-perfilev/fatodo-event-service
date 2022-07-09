@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -25,15 +26,19 @@ import java.util.UUID;
 public class UserEventController {
     static final String ENDPOINT = "/api/user-events";
 
+    private static final int DEFAULT_SIZE = 30;
+
     private final EventService eventService;
     private final EventMapper eventMapper;
 
     @GetMapping
-    public ResponseEntity<PageableReadableList<UserEventDTO>> addDefaultEvent(
+    public ResponseEntity<PageableReadableList<UserEventDTO>> getEventsPageable(
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer size
     ) {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        offset = Optional.ofNullable(offset).orElse(0);
+        size = Optional.ofNullable(size).orElse(DEFAULT_SIZE);
         Pageable pageRequest = OffsetPageRequest.of(offset, size);
         PageableReadableList<Event> eventPageableList = eventService.getAllPageable(userId, pageRequest);
         List<UserEventDTO> dtoList = eventPageableList.getData().stream()

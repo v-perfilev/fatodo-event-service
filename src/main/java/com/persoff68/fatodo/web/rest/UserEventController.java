@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequestMapping(UserEventController.ENDPOINT)
 @RequiredArgsConstructor
 public class UserEventController {
-    static final String ENDPOINT = "/api/user-event";
+    static final String ENDPOINT = "/api/user-events";
 
     private final EventService eventService;
     private final EventMapper eventMapper;

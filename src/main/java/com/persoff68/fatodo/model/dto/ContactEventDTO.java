@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -16,7 +15,5 @@ public class ContactEventDTO extends EventDTO {
 
     @NotNull
     private UUID secondUserId;
-
-    private Set<UUID> userIds;
 
 }

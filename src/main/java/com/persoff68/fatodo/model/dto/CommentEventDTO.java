@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -24,7 +23,5 @@ public class CommentEventDTO extends EventDTO {
     private UUID commentId;
 
     private String reaction;
-
-    private Set<UUID> userIds;
 
 }

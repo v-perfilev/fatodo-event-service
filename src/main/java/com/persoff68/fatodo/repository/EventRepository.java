@@ -18,8 +18,8 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("""
             select e from Event e
-            join EventRecipient r
-            where r.userId = : userId
+            join EventRecipient r on e.id = r.event.id
+            where r.userId = :userId
             order by e.createdAt desc
             """)
     Page<Event> findAllByUserId(@Param("userId") UUID userId, Pageable pageable);

@@ -51,8 +51,7 @@ public class EventService {
         ReadStatus readStatus = readStatusRepository.findByUserId(userId)
                 .orElse(new ReadStatus(userId, new Date(0)));
         Date from = readStatus.getLastReadAt();
-        long count = eventRepository.countFromByUserId(userId, from);
-        return count;
+        return eventRepository.countFromByUserId(userId, from);
     }
 
     public Date updateLastRead(UUID userId) {

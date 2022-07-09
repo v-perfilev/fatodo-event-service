@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="00000000000004" author="persoff68">
+
+        <createTable tableName="ftd_event_comment">
+            <column name="id" type="binary(16)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="event_id" type="binary(16)">
+                <constraints foreignKeyName="fk_event_comment_event" references="ftd_event(id)" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="binary(16)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="parent_id" type="binary(16)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="target_id" type="binary(16)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="comment_id" type="binary(16)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="reaction" type="varchar(16)"/>
+
+        </createTable>
+
+        <createIndex indexName="index_event_comment" tableName="ftd_event_comment">
+            <column name="event_id"/>
+        </createIndex>
+
+
+    </changeSet>
+
+</databaseChangeLog>

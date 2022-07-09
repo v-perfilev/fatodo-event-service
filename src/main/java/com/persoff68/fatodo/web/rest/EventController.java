@@ -7,6 +7,9 @@ import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.dto.ChatEventDTO;
 import com.persoff68.fatodo.model.dto.CommentEventDTO;
 import com.persoff68.fatodo.model.dto.ContactEventDTO;
+import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
 import com.persoff68.fatodo.model.mapper.EventMapper;
@@ -14,8 +17,6 @@ import com.persoff68.fatodo.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,44 +68,41 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/contact/{firstUserId}/{secondUserId}")
-    public ResponseEntity<Void> deleteContactEventsForUsers(@PathVariable UUID firstUserId,
-                                                            @PathVariable UUID secondUserId) {
-        List<UUID> userIdList = List.of(firstUserId, secondUserId);
-        eventService.deleteContactsEventForUsers(userIdList);
+    @PostMapping("/group/delete-user")
+    public ResponseEntity<Void> deleteGroupAndCommentEventsForUser(@RequestBody DeleteGroupEventsDTO dto) {
+        List<UUID> userIdList = List.of(dto.getUserId());
+        eventService.deleteGroupAndCommentEventsForUser(dto.getGroupId(), userIdList);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/group/{groupId}/{userId}")
-    public ResponseEntity<Void> deleteGroupAndCommentEventsForUser(@PathVariable UUID groupId,
-                                                                   @PathVariable UUID userId) {
-        List<UUID> userIdList = List.of(userId);
-        eventService.deleteGroupAndCommentEventsForUsers(groupId, userIdList);
+    @PostMapping("/chat/delete-user")
+    public ResponseEntity<Void> deleteChatEventsForUser(@RequestBody DeleteChatEventsDTO dto) {
+        List<UUID> userIdList = List.of(dto.getUserId());
+        eventService.deleteChatEventsForUser(dto.getChatId(), userIdList);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/chat/{chatId}/{userId}")
-    public ResponseEntity<Void> deleteChatEventsForUsers(@PathVariable UUID chatId,
-                                                        @PathVariable UUID userId) {
-        List<UUID> userIdList = List.of(userId);
-        eventService.deleteChatEventsForUsers(chatId, userIdList);
+    @PostMapping("/contact/delete")
+    public ResponseEntity<Void> deleteContactEvents(@RequestBody DeleteContactEventsDTO dto) {
+        List<UUID> userIdList = List.of(dto.getFirstUserId(), dto.getSecondUserId());
+        eventService.deleteContactsEvents(userIdList);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/group/{groupId}")
-    public ResponseEntity<Void> deleteGroupEvents(@PathVariable UUID groupId) {
+    @PostMapping("/group/delete")
+    public ResponseEntity<Void> deleteGroupEvents(@RequestBody UUID groupId) {
         eventService.deleteGroupAndCommentEvents(groupId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/item/{itemId}")
-    public ResponseEntity<Void> deleteItemEvents(@PathVariable UUID itemId) {
+    @PostMapping("/item/delete")
+    public ResponseEntity<Void> deleteItemEvents(@RequestBody UUID itemId) {
         eventService.deleteItemAndCommentEvents(itemId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/chat/{chatId}")
-    public ResponseEntity<Void> deleteChatEvents(@PathVariable UUID chatId) {
+    @PostMapping("/chat/delete")
+    public ResponseEntity<Void> deleteChatEvents(@RequestBody UUID chatId) {
         eventService.deleteChatEvents(chatId);
         return ResponseEntity.ok().build();
     }

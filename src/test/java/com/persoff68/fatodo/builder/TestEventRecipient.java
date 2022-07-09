@@ -13,6 +13,7 @@ public class TestEventRecipient extends EventRecipient {
         super();
         super.setEvent(event);
         super.setUserId(userId);
+//        super.setId(new EventRecipientId(event != null ? event.getId() : null, userId));
     }
 
     public static TestEventRecipientBuilder defaultBuilder() {
@@ -22,6 +23,7 @@ public class TestEventRecipient extends EventRecipient {
     public EventRecipient toParent() {
         EventRecipient eventRecipient = new EventRecipient();
         eventRecipient.setEvent(getEvent());
+//        eventRecipient.setId(getId());
         eventRecipient.setUserId(getUserId());
         return eventRecipient;
     }

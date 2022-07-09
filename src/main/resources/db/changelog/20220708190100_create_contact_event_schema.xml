@@ -12,7 +12,8 @@
             </column>
 
             <column name="event_id" type="binary(16)">
-                <constraints foreignKeyName="fk_event_contact_event" references="ftd_event(id)" nullable="false"/>
+                <constraints foreignKeyName="fk_event_contact_event" references="ftd_event(id)" deleteCascade="true"
+                             nullable="false"/>
             </column>
 
             <column name="first_user_id" type="binary(16)">

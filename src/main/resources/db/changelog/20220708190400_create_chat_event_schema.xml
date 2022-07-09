@@ -12,7 +12,8 @@
             </column>
 
             <column name="event_id" type="binary(16)">
-                <constraints foreignKeyName="fk_event_chat_event" references="ftd_event(id)" nullable="false"/>
+                <constraints foreignKeyName="fk_event_chat_event" references="ftd_event(id)" deleteCascade="true"
+                             nullable="false"/>
             </column>
 
             <column name="user_id" type="binary(16)">
@@ -32,7 +33,7 @@
         <createTable tableName="ftd_event_chat_user">
             <column name="chat_event_id" type="binary(16)">
                 <constraints primaryKey="true" foreignKeyName="fk_event_chat_user_event" references="ftd_event_chat(id)"
-                             nullable="false"/>
+                             deleteCascade="true" nullable="false"/>
             </column>
 
             <column name="user_id" type="binary(16)">

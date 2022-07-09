@@ -23,8 +23,8 @@
 
         <createTable tableName="ftd_event_recipient">
             <column name="event_id" type="binary(16)">
-                <constraints  foreignKeyName="fk_event_recipient_event" references="ftd_event(id)"
-                             nullable="false"/>
+                <constraints primaryKey="true" foreignKeyName="fk_event_recipient_event" references="ftd_event(id)"
+                             deleteCascade="true" nullable="false"/>
             </column>
 
             <column name="user_id" type="binary(16)">

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class CommentEvent extends AbstractModel {
 
     @OneToOne
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @NotNull

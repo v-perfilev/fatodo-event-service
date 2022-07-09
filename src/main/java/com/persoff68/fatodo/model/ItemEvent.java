@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class ItemEvent extends AbstractModel {
 
     @OneToOne
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @NotNull

@@ -25,19 +25,19 @@ public class Event extends AbstractAuditingModel {
     @Enumerated(EnumType.STRING)
     private EventType type;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "event", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private List<EventRecipient> recipients;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private ContactEvent contactEvent;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private ItemEvent itemEvent;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private CommentEvent commentEvent;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private ChatEvent chatEvent;
 
     public Event(EventType type, List<UUID> recipientIdList) {

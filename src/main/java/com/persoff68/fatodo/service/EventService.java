@@ -111,20 +111,20 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public void deleteContactsEventForUsers(List<UUID> userIdList) {
-        eventRepository.deleteContactEvent(CONTACT_EVENT_TYPES, userIdList);
-    }
-
-    public void deleteGroupAndCommentEventsForUsers(UUID groupId, List<UUID> userIdList) {
+    public void deleteGroupAndCommentEventsForUser(UUID groupId, List<UUID> userIdList) {
         eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRecipientRepository.deleteCommentEventRecipients(COMMENT_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyCommentEvents(COMMENT_EVENT_TYPES, groupId);
     }
 
-    public void deleteChatEventsForUsers(UUID chatId, List<UUID> userIdList) {
+    public void deleteChatEventsForUser(UUID chatId, List<UUID> userIdList) {
         eventRecipientRepository.deleteChatEventRecipients(CHAT_EVENT_TYPES, chatId, userIdList);
         eventRepository.deleteEmptyChatEvents(CHAT_EVENT_TYPES, chatId);
+    }
+
+    public void deleteContactsEvents(List<UUID> userIdList) {
+        eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
     }
 
     public void deleteItemAndCommentEvents(UUID itemId) {

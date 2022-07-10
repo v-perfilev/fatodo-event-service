@@ -26,14 +26,8 @@ Contract.make {
                 ),
                 "userId": anyUuid(),
                 "chatId": anyUuid(),
-                "messageId": $(
-                        consumer(optional(anyUuid())),
-                        producer(anyUuid())
-                ),
-                "reaction": $(
-                        consumer(optional(anyNonEmptyString())),
-                        producer(anyNonBlankString())
-                ),
+                "messageId": optional(anyUuid()),
+                "reaction": optional(anyNonEmptyString()),
                 "userIds": $(
                         consumer(any()),
                         producer([anyUuid()])

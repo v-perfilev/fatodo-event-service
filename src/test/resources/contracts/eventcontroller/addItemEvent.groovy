@@ -26,10 +26,7 @@ Contract.make {
                 ),
                 "userId": anyUuid(),
                 "groupId": anyUuid(),
-                "itemId": $(
-                        consumer(optional(anyUuid())),
-                        producer(anyUuid())
-                ),
+                "itemId": optional(anyUuid()),
                 "userIds": $(
                         consumer(any()),
                         producer([anyUuid()])

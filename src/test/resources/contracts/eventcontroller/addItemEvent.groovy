@@ -18,7 +18,7 @@ Contract.make {
         body(
                 "type": $(
                         consumer(anyNonBlankString()),
-                        producer("CONTACT_SEND")
+                        producer("ITEM_CREATE")
                 ),
                 "recipientIds": $(
                         consumer(any()),
@@ -26,7 +26,10 @@ Contract.make {
                 ),
                 "userId": anyUuid(),
                 "groupId": anyUuid(),
-                "itemId": optional(anyUuid()),
+                "itemId": $(
+                        consumer(any()),
+                        producer(anyUuid())
+                ),
                 "userIds": $(
                         consumer(any()),
                         producer([anyUuid()])

@@ -9,6 +9,7 @@ import com.persoff68.fatodo.model.dto.CommentEventDTO;
 import com.persoff68.fatodo.model.dto.ContactEventDTO;
 import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
@@ -90,20 +91,20 @@ public class EventController {
     }
 
     @PostMapping("/group/delete")
-    public ResponseEntity<Void> deleteGroupEvents(@RequestBody UUID groupId) {
-        eventService.deleteGroupAndCommentEvents(groupId);
+    public ResponseEntity<Void> deleteGroupEvents(@RequestBody DeleteEventsDTO dto) {
+        eventService.deleteGroupAndCommentEvents(dto.getId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/item/delete")
-    public ResponseEntity<Void> deleteItemEvents(@RequestBody UUID itemId) {
-        eventService.deleteItemAndCommentEvents(itemId);
+    public ResponseEntity<Void> deleteItemEvents(@RequestBody DeleteEventsDTO dto) {
+        eventService.deleteItemAndCommentEvents(dto.getId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/chat/delete")
-    public ResponseEntity<Void> deleteChatEvents(@RequestBody UUID chatId) {
-        eventService.deleteChatEvents(chatId);
+    public ResponseEntity<Void> deleteChatEvents(@RequestBody DeleteEventsDTO dto) {
+        eventService.deleteChatEvents(dto.getId());
         return ResponseEntity.ok().build();
     }
 

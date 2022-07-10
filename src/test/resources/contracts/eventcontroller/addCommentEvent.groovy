@@ -24,12 +24,13 @@ Contract.make {
                         consumer(any()),
                         producer([anyUuid()])
                 ),
+                "userId": anyUuid(),
                 "parentId": anyUuid(),
                 "targetId": anyUuid(),
                 "commentId": anyUuid(),
                 "reaction": $(
-                        consumer(optional(anyNonBlankString())),
-                        producer(anyNonBlankString())
+                        consumer(any()),
+                        producer("test")
                 ),
         )
     }

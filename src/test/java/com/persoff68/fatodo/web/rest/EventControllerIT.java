@@ -30,6 +30,7 @@ import com.persoff68.fatodo.model.dto.CommentEventDTO;
 import com.persoff68.fatodo.model.dto.ContactEventDTO;
 import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
@@ -430,7 +431,8 @@ class EventControllerIT {
     @Transactional
     void testDeleteGroupEvents_ok() throws Exception {
         String url = ENDPOINT + "/group/delete";
-        String requestBody = objectMapper.writeValueAsString(GROUP_ID);
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(GROUP_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -448,11 +450,25 @@ class EventControllerIT {
     }
 
     @Test
+    @WithAnonymousUser
+    void testDeleteGroupEvents_unauthorized() throws Exception {
+        String url = ENDPOINT + "/group/delete";
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(GROUP_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     @Transactional
     void testDeleteItemEvents_ok() throws Exception {
         String url = ENDPOINT + "/item/delete";
-        String requestBody = objectMapper.writeValueAsString(ITEM_ID);
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(ITEM_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -473,7 +489,8 @@ class EventControllerIT {
     @WithAnonymousUser
     void testDeleteItemEvents_unauthorized() throws Exception {
         String url = ENDPOINT + "/item/delete";
-        String requestBody = objectMapper.writeValueAsString(ITEM_ID);
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(ITEM_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -486,7 +503,8 @@ class EventControllerIT {
     @Transactional
     void testDeleteChatEvents_ok() throws Exception {
         String url = ENDPOINT + "/chat/delete";
-        String requestBody = objectMapper.writeValueAsString(CHAT_ID);
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(CHAT_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -504,7 +522,8 @@ class EventControllerIT {
     @WithAnonymousUser
     void testDeleteChatEvents_unauthorized() throws Exception {
         String url = ENDPOINT + "/chat/delete";
-        String requestBody = objectMapper.writeValueAsString(CHAT_ID);
+        DeleteEventsDTO dto = new DeleteEventsDTO(UUID.fromString(CHAT_ID));
+        String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))

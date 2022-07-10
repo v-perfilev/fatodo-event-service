@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -111,6 +112,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void deleteGroupAndCommentEventsForUser(UUID groupId, List<UUID> userIdList) {
         eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
@@ -118,25 +120,30 @@ public class EventService {
         eventRepository.deleteEmptyCommentEvents(COMMENT_EVENT_TYPES, groupId);
     }
 
+    @Transactional
     public void deleteChatEventsForUser(UUID chatId, List<UUID> userIdList) {
         eventRecipientRepository.deleteChatEventRecipients(CHAT_EVENT_TYPES, chatId, userIdList);
         eventRepository.deleteEmptyChatEvents(CHAT_EVENT_TYPES, chatId);
     }
 
+    @Transactional
     public void deleteContactsEvents(List<UUID> userIdList) {
         eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
     }
 
+    @Transactional
     public void deleteItemAndCommentEvents(UUID itemId) {
         eventRepository.deleteItemEvents(ITEM_EVENT_TYPES, itemId);
         eventRepository.deleteCommentEventsByTargetId(COMMENT_EVENT_TYPES, itemId);
     }
 
+    @Transactional
     public void deleteGroupAndCommentEvents(UUID groupId) {
         eventRepository.deleteGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRepository.deleteCommentEventsByParentId(COMMENT_EVENT_TYPES, groupId);
     }
 
+    @Transactional
     public void deleteChatEvents(UUID chatId) {
         eventRepository.deleteChatEvents(CHAT_EVENT_TYPES, chatId);
     }

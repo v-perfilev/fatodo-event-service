@@ -4,6 +4,7 @@ import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.ItemEvent;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.dto.ChatEventDTO;
 import com.persoff68.fatodo.model.dto.CommentEventDTO;
 import com.persoff68.fatodo.model.dto.ContactEventDTO;
@@ -13,6 +14,7 @@ import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
+import com.persoff68.fatodo.model.dto.ReminderEventDTO;
 import com.persoff68.fatodo.model.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,13 @@ public class EventController {
     public ResponseEntity<Void> addChatEvent(@RequestBody ChatEventDTO dto) {
         ChatEvent chatEvent = eventMapper.chatDTOToPojo(dto);
         eventService.addChatEvent(dto.getType(), dto.getRecipientIds(), chatEvent, dto.getUserIds());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/reminder")
+    public ResponseEntity<Void> addReminderEvent(@RequestBody ReminderEventDTO dto) {
+        ReminderEvent reminderEvent = eventMapper.reminderDTOToPojo(dto);
+        eventService.addReminderEvent(dto.getType(), dto.getRecipientIds(), reminderEvent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

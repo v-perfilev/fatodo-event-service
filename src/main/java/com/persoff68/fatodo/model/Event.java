@@ -40,6 +40,9 @@ public class Event extends AbstractAuditingModel {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
     private ChatEvent chatEvent;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    private ReminderEvent reminderEvent;
+
     public Event(EventType type, List<UUID> recipientIdList) {
         this.type = type;
         this.recipients = recipientIdList.stream()

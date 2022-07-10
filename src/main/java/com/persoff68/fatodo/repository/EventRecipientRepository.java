@@ -47,4 +47,15 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
                                    @Param("chatId") UUID chatId,
                                    @Param("userIds") List<UUID> userIds);
 
+    @Modifying
+    @Query("""
+            delete from EventRecipient r
+            where r.userId in :userIds
+            and r in (select er from EventRecipient er join Event e on er.event.id = e.id where e.type in :eventTypes)
+            and r in (select er from EventRecipient er join ReminderEvent re on er.event.id = re.event.id where re.groupId = :groupId)
+            """)
+    void deleteReminderEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
+                                       @Param("groupId") UUID groupId,
+                                       @Param("userIds") List<UUID> userIds);
+
 }

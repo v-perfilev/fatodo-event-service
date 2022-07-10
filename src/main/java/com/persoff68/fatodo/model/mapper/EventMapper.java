@@ -5,10 +5,12 @@ import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.ItemEvent;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.dto.ChatEventDTO;
 import com.persoff68.fatodo.model.dto.CommentEventDTO;
 import com.persoff68.fatodo.model.dto.ContactEventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
+import com.persoff68.fatodo.model.dto.ReminderEventDTO;
 import com.persoff68.fatodo.model.dto.UserEventDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -23,6 +25,8 @@ public interface EventMapper {
     CommentEvent commentDTOToPojo(CommentEventDTO dto);
 
     ChatEvent chatDTOToPojo(ChatEventDTO dto);
+
+    ReminderEvent reminderDTOToPojo(ReminderEventDTO dto);
 
     UserEventDTO pojoToDTO(Event event);
 

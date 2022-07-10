@@ -7,6 +7,7 @@ import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.PageableReadableList;
 import com.persoff68.fatodo.model.ReadStatus;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
@@ -35,6 +36,9 @@ public class EventService {
             Arrays.stream(EventType.values()).filter(EventType::isCommentEvent).toList();
     private static final List<EventType> CHAT_EVENT_TYPES =
             Arrays.stream(EventType.values()).filter(EventType::isChatEvent).toList();
+
+    private static final List<EventType> REMINDER_EVENT_TYPES =
+            Arrays.stream(EventType.values()).filter(EventType::isReminderEvent).toList();
 
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
@@ -112,12 +116,24 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    public void addReminderEvent(EventType type, List<UUID> recipientIdList, ReminderEvent reminderEvent) {
+        if (!type.isReminderEvent()) {
+            throw new ModelInvalidException();
+        }
+        Event event = new Event(type, recipientIdList);
+        reminderEvent = new ReminderEvent(event, reminderEvent);
+        event.setReminderEvent(reminderEvent);
+        eventRepository.save(event);
+    }
+
     @Transactional
     public void deleteGroupAndCommentEventsForUser(UUID groupId, List<UUID> userIdList) {
         eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRecipientRepository.deleteCommentEventRecipients(COMMENT_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyCommentEvents(COMMENT_EVENT_TYPES, groupId);
+        eventRecipientRepository.deleteReminderEventRecipients(REMINDER_EVENT_TYPES, groupId, userIdList);
+        eventRepository.deleteEmptyReminderEvents(REMINDER_EVENT_TYPES, groupId);
     }
 
     @Transactional
@@ -135,12 +151,14 @@ public class EventService {
     public void deleteItemAndCommentEvents(UUID itemId) {
         eventRepository.deleteItemEvents(ITEM_EVENT_TYPES, itemId);
         eventRepository.deleteCommentEventsByTargetId(COMMENT_EVENT_TYPES, itemId);
+        eventRepository.deleteReminderEventsByItemId(REMINDER_EVENT_TYPES, itemId);
     }
 
     @Transactional
     public void deleteGroupAndCommentEvents(UUID groupId) {
         eventRepository.deleteGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRepository.deleteCommentEventsByParentId(COMMENT_EVENT_TYPES, groupId);
+        eventRepository.deleteReminderEventsByGroupId(REMINDER_EVENT_TYPES, groupId);
     }
 
     @Transactional

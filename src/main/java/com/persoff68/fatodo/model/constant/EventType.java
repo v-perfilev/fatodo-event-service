@@ -29,7 +29,10 @@ public enum EventType {
     CHAT_MEMBER_ADD,
     CHAT_MEMBER_DELETE,
     CHAT_MEMBER_LEAVE,
-    CHAT_REACTION;
+    CHAT_REACTION,
+
+    // REMINDER
+    REMINDER;
 
     public boolean isDefaultEvent() {
         return switch (this) {
@@ -64,6 +67,13 @@ public enum EventType {
         return switch (this) {
             case CHAT_CREATE, CHAT_UPDATE, CHAT_MEMBER_ADD, CHAT_MEMBER_DELETE,
                     CHAT_MEMBER_LEAVE, CHAT_REACTION -> true;
+            default -> false;
+        };
+    }
+
+    public boolean isReminderEvent() {
+        return switch (this) {
+            case REMINDER -> true;
             default -> false;
         };
     }

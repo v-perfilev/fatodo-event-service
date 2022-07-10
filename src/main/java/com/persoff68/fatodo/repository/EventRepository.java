@@ -71,6 +71,15 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             delete from Event e
             where e.type in :eventTypes
+            and e in (select ev from Event ev join ReminderEvent r on ev.id = r.event.id where r.groupId = :groupId)
+            and e.recipients.size = 0
+            """)
+    void deleteEmptyReminderEvents(@Param("eventTypes") List<EventType> eventTypes, @Param("groupId") UUID groupId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.type in :eventTypes
             and e in (select ev from Event ev join ItemEvent i on ev.id = i.event.id where i.groupId = :groupId)
             """)
     void deleteGroupEvents(@Param("eventTypes") List<EventType> eventTypes, @Param("groupId") UUID groupId);
@@ -108,5 +117,21 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             and e in (select ev from Event ev join ChatEvent c on ev.id = c.event.id where c.chatId = :chatId)
             """)
     void deleteChatEvents(@Param("eventTypes") List<EventType> eventTypes, @Param("chatId") UUID chatId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.type in :eventTypes
+            and e in (select ev from Event ev join ReminderEvent r on ev.id = r.event.id where r.groupId = :groupId)
+            """)
+    void deleteReminderEventsByGroupId(@Param("eventTypes") List<EventType> eventTypes, @Param("groupId") UUID groupId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.type in :eventTypes
+            and e in (select ev from Event ev join ReminderEvent r on ev.id = r.event.id where r.itemId = :itemId)
+            """)
+    void deleteReminderEventsByItemId(@Param("eventTypes") List<EventType> eventTypes, @Param("itemId") UUID itemId);
 
 }

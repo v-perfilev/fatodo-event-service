@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.ItemEvent;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import lombok.Builder;
 
@@ -21,7 +22,8 @@ public class TestEvent extends Event {
                      ContactEvent contactEvent,
                      ItemEvent itemEvent,
                      CommentEvent commentEvent,
-                     ChatEvent chatEvent) {
+                     ChatEvent chatEvent,
+                     ReminderEvent reminderEvent) {
         super();
         super.setId(id);
         super.setType(type);
@@ -30,6 +32,7 @@ public class TestEvent extends Event {
         super.setItemEvent(itemEvent);
         super.setCommentEvent(commentEvent);
         super.setChatEvent(chatEvent);
+        super.setReminderEvent(reminderEvent);
     }
 
     public static TestEventBuilder defaultBuilder() {
@@ -46,6 +49,7 @@ public class TestEvent extends Event {
         event.setItemEvent(getItemEvent());
         event.setCommentEvent(getCommentEvent());
         event.setChatEvent(getChatEvent());
+        event.setReminderEvent(getReminderEvent());
         return event;
     }
 

@@ -4,9 +4,12 @@ import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.ItemEvent;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +24,9 @@ public class UserEventDTO {
     private CommentEvent commentEvent;
 
     private ChatEvent chatEvent;
+
+    private ReminderEvent reminderEvent;
+
+    private Date createdAt;
 
 }

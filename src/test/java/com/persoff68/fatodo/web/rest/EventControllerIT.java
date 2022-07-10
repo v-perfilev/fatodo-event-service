@@ -16,6 +16,8 @@ import com.persoff68.fatodo.builder.TestEventRecipient;
 import com.persoff68.fatodo.builder.TestItemEvent;
 import com.persoff68.fatodo.builder.TestItemEventDTO;
 import com.persoff68.fatodo.builder.TestItemEventUser;
+import com.persoff68.fatodo.builder.TestReminderEvent;
+import com.persoff68.fatodo.builder.TestReminderEventDTO;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.CommentEvent;
@@ -24,6 +26,7 @@ import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ItemEventUser;
+import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.model.dto.ChatEventDTO;
 import com.persoff68.fatodo.model.dto.CommentEventDTO;
@@ -34,6 +37,7 @@ import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.ItemEventDTO;
+import com.persoff68.fatodo.model.dto.ReminderEventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
@@ -90,10 +94,12 @@ class EventControllerIT {
         Event itemEvent = buildItemEvent(GROUP_ID, ITEM_ID, USER_ID_1);
         Event commentEvent = buildCommentEvent(GROUP_ID, USER_ID_1);
         Event chatEvent = buildChatEvent(CHAT_ID, USER_ID_1);
+        Event reminderEvent = buildReminderEvent(GROUP_ID, ITEM_ID, USER_ID_1);
         eventRepository.save(contactEvent);
         eventRepository.save(itemEvent);
         eventRepository.save(commentEvent);
         eventRepository.save(chatEvent);
+        eventRepository.save(reminderEvent);
     }
 
     @Test
@@ -312,6 +318,42 @@ class EventControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     @Transactional
+    void testAddReminderEvent_ok() throws Exception {
+        String url = ENDPOINT + "/reminder";
+        ReminderEventDTO dto = TestReminderEventDTO.defaultBuilder()
+                .eventType(EventType.REMINDER)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated());
+
+        Page<Event> eventPage = eventRepository.findAllByUserId(UUID.fromString(USER_ID_2), Pageable.unpaged());
+        assertThat(eventPage).hasSize(1);
+
+        Event event = eventPage.getContent().get(0);
+        assertThat(event.getType()).isEqualTo(EventType.REMINDER);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testAddReminderEvent_unauthorized() throws Exception {
+        String url = ENDPOINT + "/reminder";
+        ReminderEventDTO dto = TestReminderEventDTO.defaultBuilder()
+                .eventType(EventType.REMINDER)
+                .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @Transactional
     void testDeleteGroupAndCommentEventsForUser_ok() throws Exception {
         String url = ENDPOINT + "/group/delete-user";
         DeleteGroupEventsDTO dto = new DeleteGroupEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
@@ -329,10 +371,14 @@ class EventControllerIT {
         boolean commentEventsPresented = eventList.stream()
                 .anyMatch(e -> e.getType().isCommentEvent()
                         && e.getCommentEvent().getParentId().equals(UUID.fromString(GROUP_ID)));
+        boolean reminderEventsPresented = eventList.stream()
+                .anyMatch(e -> e.getType().isReminderEvent()
+                        && e.getReminderEvent().getGroupId().equals(UUID.fromString(GROUP_ID)));
 
         assertThat(eventList).isNotEmpty();
         assertThat(groupEventsPresented).isFalse();
         assertThat(commentEventsPresented).isFalse();
+        assertThat(reminderEventsPresented).isFalse();
     }
 
     @Test
@@ -443,10 +489,13 @@ class EventControllerIT {
                 .anyMatch(e -> e.getType().isItemEvent() && e.getItemEvent().getGroupId().equals(UUID.fromString(GROUP_ID)));
         boolean commentEventsPresented = eventList.stream()
                 .anyMatch(e -> e.getType().isCommentEvent() && e.getCommentEvent().getParentId().equals(UUID.fromString(GROUP_ID)));
+        boolean reminderEventsPresented = eventList.stream()
+                .anyMatch(e -> e.getType().isReminderEvent() && e.getReminderEvent().getGroupId().equals(UUID.fromString(GROUP_ID)));
 
         assertThat(eventList).isNotEmpty();
         assertThat(itemEventsPresented).isFalse();
         assertThat(commentEventsPresented).isFalse();
+        assertThat(reminderEventsPresented).isFalse();
     }
 
     @Test
@@ -479,10 +528,13 @@ class EventControllerIT {
                 .anyMatch(e -> e.getType().isItemEvent() && e.getItemEvent().getItemId().equals(UUID.fromString(ITEM_ID)));
         boolean commentEventsPresented = eventList.stream()
                 .anyMatch(e -> e.getType().isCommentEvent() && e.getCommentEvent().getTargetId().equals(UUID.fromString(ITEM_ID)));
+        boolean reminderEventsPresented = eventList.stream()
+                .anyMatch(e -> e.getType().isReminderEvent() && e.getReminderEvent().getItemId().equals(UUID.fromString(ITEM_ID)));
 
         assertThat(eventList).isNotEmpty();
         assertThat(itemEventsPresented).isFalse();
         assertThat(commentEventsPresented).isFalse();
+        assertThat(reminderEventsPresented).isFalse();
     }
 
     @Test
@@ -599,6 +651,24 @@ class EventControllerIT {
         eventRecipient.setEvent(event);
 
         chatEvent.setEvent(event);
+        return event;
+    }
+
+    private Event buildReminderEvent(String groupId, String itemId, String userId) {
+        ReminderEvent reminderEvent = TestReminderEvent.defaultBuilder()
+                .groupId(UUID.fromString(groupId))
+                .itemId(UUID.fromString(itemId))
+                .build().toParent();
+
+        EventRecipient eventRecipient = TestEventRecipient.defaultBuilder()
+                .userId(UUID.fromString(userId)).build().toParent();
+        Event event = TestEvent.defaultBuilder()
+                .type(EventType.REMINDER)
+                .eventRecipients(List.of(eventRecipient)).reminderEvent(reminderEvent)
+                .build().toParent();
+        eventRecipient.setEvent(event);
+
+        reminderEvent.setEvent(event);
         return event;
     }
 

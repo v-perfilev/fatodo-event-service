@@ -50,7 +50,7 @@ public class UserEventController {
     }
 
     @GetMapping("/unread-count")
-    public ResponseEntity<Long> unreadCount() {
+    public ResponseEntity<Long> getUnreadCount() {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         long unreadCount = eventService.getUnreadCount(userId);
         return ResponseEntity.ok(unreadCount);

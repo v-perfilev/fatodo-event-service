@@ -3,11 +3,11 @@ package contracts.usereventcontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get unread count for user'
-    description 'should return status 200 and Long'
+    name 'refresh unread count for user'
+    description 'should return status 200'
     request {
         method GET()
-        url("/api/user-events/unread-count")
+        url("/api/user-events/refresh")
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
@@ -17,9 +17,5 @@ Contract.make {
     }
     response {
         status 200
-        headers {
-            contentType applicationJson()
-        }
-        body(anyNumber())
     }
 }

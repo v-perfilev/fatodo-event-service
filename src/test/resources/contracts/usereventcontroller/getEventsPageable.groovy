@@ -1,13 +1,13 @@
-package contracts.relationresource
+package contracts.usereventcontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get all relation for user'
-    description 'should return status 200 and list of RelationDTOs'
+    name 'get events for user'
+    description 'should return status 200 and list of UserEventDTO'
     request {
         method GET()
-        url("/api/relations")
+        url("/api/user-events")
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
@@ -20,12 +20,17 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body([
-                [
-                        id            : anyUuid(),
-                        "firstUserId" : anyUuid(),
-                        "secondUserId": anyUuid()
-                ]
-        ])
+        body(
+                "data": [
+                        "type"        : anyNonBlankString(),
+                        "contactEvent": optional(any()),
+                        "itemEvent"   : optional(any()),
+                        "commentEvent": optional(any()),
+                        "chatEvent"   : optional(any()),
+
+                ],
+                "count": anyNumber(),
+                "unread": anyNumber()
+        )
     }
 }

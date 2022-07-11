@@ -80,6 +80,10 @@ public class EventService {
         if (!type.isContactEvent()) {
             throw new ModelInvalidException();
         }
+        // delete previous events
+        List<UUID> userIdList = List.of(contactEvent.getFirstUserId(), contactEvent.getSecondUserId());
+        eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
+        // and new event
         Event event = new Event(type, recipientIdList);
         contactEvent.setEvent(event);
         event.setContactEvent(contactEvent);

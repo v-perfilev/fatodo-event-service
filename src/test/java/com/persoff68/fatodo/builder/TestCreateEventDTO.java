@@ -1,29 +1,29 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TestEventDTO extends EventDTO {
+public class TestCreateEventDTO extends CreateEventDTO {
 
     @Builder
-    public TestEventDTO(EventType eventType, List<UUID> recipientIds) {
+    public TestCreateEventDTO(EventType eventType, List<UUID> recipientIds) {
         super();
         super.setType(eventType);
         super.setRecipientIds(recipientIds);
     }
 
-    public static TestEventDTOBuilder defaultBuilder() {
-        return TestEventDTO.builder()
+    public static TestCreateEventDTOBuilder defaultBuilder() {
+        return TestCreateEventDTO.builder()
                 .eventType(EventType.WELCOME)
                 .recipientIds(List.of(UUID.randomUUID()));
     }
 
-    public EventDTO toParent() {
-        EventDTO dto = new EventDTO();
+    public CreateEventDTO toParent() {
+        CreateEventDTO dto = new CreateEventDTO();
         dto.setType(getType());
         dto.setRecipientIds(getRecipientIds());
         return dto;

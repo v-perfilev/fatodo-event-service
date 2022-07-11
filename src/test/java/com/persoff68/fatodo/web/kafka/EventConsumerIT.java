@@ -1,23 +1,22 @@
 package com.persoff68.fatodo.web.kafka;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.builder.TestChatEventDTO;
-import com.persoff68.fatodo.builder.TestCommentEventDTO;
-import com.persoff68.fatodo.builder.TestContactEventDTO;
-import com.persoff68.fatodo.builder.TestEventDTO;
-import com.persoff68.fatodo.builder.TestItemEventDTO;
-import com.persoff68.fatodo.builder.TestReminderEventDTO;
+import com.persoff68.fatodo.builder.TestCreateChatEventDTO;
+import com.persoff68.fatodo.builder.TestCreateCommentEventDTO;
+import com.persoff68.fatodo.builder.TestCreateContactEventDTO;
+import com.persoff68.fatodo.builder.TestCreateEventDTO;
+import com.persoff68.fatodo.builder.TestCreateItemEventDTO;
+import com.persoff68.fatodo.builder.TestCreateReminderEventDTO;
 import com.persoff68.fatodo.config.util.KafkaUtils;
-import com.persoff68.fatodo.model.dto.ChatEventDTO;
-import com.persoff68.fatodo.model.dto.CommentEventDTO;
-import com.persoff68.fatodo.model.dto.ContactEventDTO;
-import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.dto.ItemEventDTO;
-import com.persoff68.fatodo.model.dto.ReminderEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
+import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import com.persoff68.fatodo.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddDefaultEvent() throws InterruptedException {
-        EventDTO dto = TestEventDTO.defaultBuilder().build().toParent();
+        CreateEventDTO dto = TestCreateEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "default", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -74,7 +73,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddContactEvent() throws InterruptedException {
-        ContactEventDTO dto = TestContactEventDTO.defaultBuilder().build().toParent();
+        CreateContactEventDTO dto = TestCreateContactEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "contact", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -84,7 +83,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddItemEvent() throws InterruptedException {
-        ItemEventDTO dto = TestItemEventDTO.defaultBuilder().build().toParent();
+        CreateItemEventDTO dto = TestCreateItemEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "item", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -94,7 +93,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddCommentEvent() throws InterruptedException {
-        CommentEventDTO dto = TestCommentEventDTO.defaultBuilder().build().toParent();
+        CreateCommentEventDTO dto = TestCreateCommentEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "comment", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -104,7 +103,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddChatEvent() throws InterruptedException {
-        ChatEventDTO dto = TestChatEventDTO.defaultBuilder().build().toParent();
+        CreateChatEventDTO dto = TestCreateChatEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "chat", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -114,7 +113,7 @@ public class EventConsumerIT {
 
     @Test
     void testAddReminderEvent() throws InterruptedException {
-        ReminderEventDTO dto = TestReminderEventDTO.defaultBuilder().build().toParent();
+        CreateReminderEventDTO dto = TestCreateReminderEventDTO.defaultBuilder().build().toParent();
         kafkaTemplate.send("event_add", "reminder", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 

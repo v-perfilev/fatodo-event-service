@@ -1,22 +1,29 @@
 package com.persoff68.fatodo.model.dto;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class EventDTO {
+@EqualsAndHashCode(callSuper = true)
+public class EventDTO extends AbstractDTO {
 
-    @NotNull
     private EventType type;
 
-    private List<UUID> recipientIds;
+    private ContactEventDTO contactEvent;
+
+    private ItemEventDTO itemEvent;
+
+    private CommentEventDTO commentEvent;
+
+    private ChatEventDTO chatEvent;
+
+    private ReminderEventDTO reminderEvent;
+
+    private Date createdAt;
 
 }

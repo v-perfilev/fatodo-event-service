@@ -1,16 +1,16 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.ReminderEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TestReminderEventDTO extends ReminderEventDTO {
+public class TestCreateReminderEventDTO extends CreateReminderEventDTO {
 
     @Builder
-    public TestReminderEventDTO(EventType eventType, UUID groupId, UUID itemId, List<UUID> recipientIds) {
+    public TestCreateReminderEventDTO(EventType eventType, UUID groupId, UUID itemId, List<UUID> recipientIds) {
         super();
         super.setType(eventType);
         super.setGroupId(groupId);
@@ -18,16 +18,16 @@ public class TestReminderEventDTO extends ReminderEventDTO {
         super.setRecipientIds(recipientIds);
     }
 
-    public static TestReminderEventDTOBuilder defaultBuilder() {
-        return TestReminderEventDTO.builder()
+    public static TestCreateReminderEventDTOBuilder defaultBuilder() {
+        return TestCreateReminderEventDTO.builder()
                 .eventType(EventType.REMINDER)
                 .groupId(UUID.randomUUID())
                 .itemId(UUID.randomUUID())
                 .recipientIds(List.of(UUID.randomUUID()));
     }
 
-    public ReminderEventDTO toParent() {
-        ReminderEventDTO dto = new ReminderEventDTO();
+    public CreateReminderEventDTO toParent() {
+        CreateReminderEventDTO dto = new CreateReminderEventDTO();
         dto.setType(getType());
         dto.setGroupId(getGroupId());
         dto.setItemId(getItemId());

@@ -3,21 +3,21 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoEventServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestCreateChatEventDTO;
 import com.persoff68.fatodo.builder.TestChatEvent;
-import com.persoff68.fatodo.builder.TestChatEventDTO;
 import com.persoff68.fatodo.builder.TestChatEventUser;
+import com.persoff68.fatodo.builder.TestCreateCommentEventDTO;
 import com.persoff68.fatodo.builder.TestCommentEvent;
-import com.persoff68.fatodo.builder.TestCommentEventDTO;
+import com.persoff68.fatodo.builder.TestCreateContactEventDTO;
 import com.persoff68.fatodo.builder.TestContactEvent;
-import com.persoff68.fatodo.builder.TestContactEventDTO;
+import com.persoff68.fatodo.builder.TestCreateEventDTO;
+import com.persoff68.fatodo.builder.TestCreateItemEventDTO;
+import com.persoff68.fatodo.builder.TestCreateReminderEventDTO;
 import com.persoff68.fatodo.builder.TestEvent;
-import com.persoff68.fatodo.builder.TestEventDTO;
 import com.persoff68.fatodo.builder.TestEventRecipient;
 import com.persoff68.fatodo.builder.TestItemEvent;
-import com.persoff68.fatodo.builder.TestItemEventDTO;
 import com.persoff68.fatodo.builder.TestItemEventUser;
 import com.persoff68.fatodo.builder.TestReminderEvent;
-import com.persoff68.fatodo.builder.TestReminderEventDTO;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.CommentEvent;
@@ -28,16 +28,16 @@ import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ItemEventUser;
 import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.ChatEventDTO;
-import com.persoff68.fatodo.model.dto.CommentEventDTO;
-import com.persoff68.fatodo.model.dto.ContactEventDTO;
-import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.dto.ItemEventDTO;
-import com.persoff68.fatodo.model.dto.ReminderEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
@@ -107,7 +107,7 @@ class EventControllerIT {
     @Transactional
     void testAddDefaultEvent_ok() throws Exception {
         String url = ENDPOINT + "/default";
-        EventDTO dto = TestEventDTO.defaultBuilder()
+        CreateEventDTO dto = TestCreateEventDTO.defaultBuilder()
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
@@ -134,7 +134,7 @@ class EventControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testAddDefaultEvent_wrongType() throws Exception {
         String url = ENDPOINT + "/default";
-        EventDTO dto = TestEventDTO.defaultBuilder()
+        CreateEventDTO dto = TestCreateEventDTO.defaultBuilder()
                 .eventType(EventType.CHAT_CREATE)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -148,7 +148,7 @@ class EventControllerIT {
     @WithCustomSecurityContext
     void testAddDefaultEvent_wrongRole() throws Exception {
         String url = ENDPOINT + "/default";
-        EventDTO dto = TestEventDTO.defaultBuilder()
+        CreateEventDTO dto = TestCreateEventDTO.defaultBuilder()
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
@@ -161,7 +161,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddDefaultEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/default";
-        EventDTO dto = TestEventDTO.defaultBuilder()
+        CreateEventDTO dto = TestCreateEventDTO.defaultBuilder()
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
@@ -176,7 +176,7 @@ class EventControllerIT {
     @Transactional
     void testAddContactEvent_ok() throws Exception {
         String url = ENDPOINT + "/contact";
-        ContactEventDTO dto = TestContactEventDTO.defaultBuilder()
+        CreateContactEventDTO dto = TestCreateContactEventDTO.defaultBuilder()
                 .eventType(EventType.CONTACT_SEND)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -196,7 +196,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddContactEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/contact";
-        ContactEventDTO dto = TestContactEventDTO.defaultBuilder()
+        CreateContactEventDTO dto = TestCreateContactEventDTO.defaultBuilder()
                 .eventType(EventType.CONTACT_SEND)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -212,7 +212,7 @@ class EventControllerIT {
     @Transactional
     void testAddItemEvent_ok() throws Exception {
         String url = ENDPOINT + "/item";
-        ItemEventDTO dto = TestItemEventDTO.defaultBuilder()
+        CreateItemEventDTO dto = TestCreateItemEventDTO.defaultBuilder()
                 .eventType(EventType.ITEM_CREATE)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -232,7 +232,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddItemEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/item";
-        ItemEventDTO dto = TestItemEventDTO.defaultBuilder()
+        CreateItemEventDTO dto = TestCreateItemEventDTO.defaultBuilder()
                 .eventType(EventType.ITEM_CREATE)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -248,7 +248,7 @@ class EventControllerIT {
     @Transactional
     void testAddCommentEvent_ok() throws Exception {
         String url = ENDPOINT + "/comment";
-        CommentEventDTO dto = TestCommentEventDTO.defaultBuilder()
+        CreateCommentEventDTO dto = TestCreateCommentEventDTO.defaultBuilder()
                 .eventType(EventType.COMMENT_ADD)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -268,7 +268,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddCommentEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/comment";
-        CommentEventDTO dto = TestCommentEventDTO.defaultBuilder()
+        CreateCommentEventDTO dto = TestCreateCommentEventDTO.defaultBuilder()
                 .eventType(EventType.COMMENT_ADD)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -284,7 +284,7 @@ class EventControllerIT {
     @Transactional
     void testAddChatEvent_ok() throws Exception {
         String url = ENDPOINT + "/chat";
-        ChatEventDTO dto = TestChatEventDTO.defaultBuilder()
+        CreateChatEventDTO dto = TestCreateChatEventDTO.defaultBuilder()
                 .eventType(EventType.CHAT_CREATE)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -304,7 +304,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddChatEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/chat";
-        ChatEventDTO dto = TestChatEventDTO.defaultBuilder()
+        CreateChatEventDTO dto = TestCreateChatEventDTO.defaultBuilder()
                 .eventType(EventType.CHAT_CREATE)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -320,7 +320,7 @@ class EventControllerIT {
     @Transactional
     void testAddReminderEvent_ok() throws Exception {
         String url = ENDPOINT + "/reminder";
-        ReminderEventDTO dto = TestReminderEventDTO.defaultBuilder()
+        CreateReminderEventDTO dto = TestCreateReminderEventDTO.defaultBuilder()
                 .eventType(EventType.REMINDER)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -340,7 +340,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testAddReminderEvent_unauthorized() throws Exception {
         String url = ENDPOINT + "/reminder";
-        ReminderEventDTO dto = TestReminderEventDTO.defaultBuilder()
+        CreateReminderEventDTO dto = TestCreateReminderEventDTO.defaultBuilder()
                 .eventType(EventType.REMINDER)
                 .recipientIds(List.of(UUID.fromString(USER_ID_2))).build().toParent();
         String requestBody = objectMapper.writeValueAsString(dto);

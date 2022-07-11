@@ -5,16 +5,16 @@ import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ReminderEvent;
-import com.persoff68.fatodo.model.dto.ChatEventDTO;
-import com.persoff68.fatodo.model.dto.CommentEventDTO;
-import com.persoff68.fatodo.model.dto.ContactEventDTO;
-import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.dto.ItemEventDTO;
-import com.persoff68.fatodo.model.dto.ReminderEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
+import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
 import com.persoff68.fatodo.model.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -38,41 +38,41 @@ public class EventController {
     private final EventMapper eventMapper;
 
     @PostMapping("/default")
-    public ResponseEntity<Void> addDefaultEvent(@RequestBody EventDTO dto) {
+    public ResponseEntity<Void> addDefaultEvent(@RequestBody CreateEventDTO dto) {
         eventService.addDefaultEvent(dto.getType(), dto.getRecipientIds());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/contact")
-    public ResponseEntity<Void> addContactEvent(@RequestBody ContactEventDTO dto) {
+    public ResponseEntity<Void> addContactEvent(@RequestBody CreateContactEventDTO dto) {
         ContactEvent contactEvent = eventMapper.contactDTOToPojo(dto);
         eventService.addContactEvent(dto.getType(), dto.getRecipientIds(), contactEvent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/item")
-    public ResponseEntity<Void> addItemEvent(@RequestBody ItemEventDTO dto) {
+    public ResponseEntity<Void> addItemEvent(@RequestBody CreateItemEventDTO dto) {
         ItemEvent itemEvent = eventMapper.itemDTOToPojo(dto);
         eventService.addItemEvent(dto.getType(), dto.getRecipientIds(), itemEvent, dto.getUserIds());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Void> addCommentEvent(@RequestBody CommentEventDTO dto) {
+    public ResponseEntity<Void> addCommentEvent(@RequestBody CreateCommentEventDTO dto) {
         CommentEvent commentEvent = eventMapper.commentDTOToPojo(dto);
         eventService.addCommentEvent(dto.getType(), dto.getRecipientIds(), commentEvent);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/chat")
-    public ResponseEntity<Void> addChatEvent(@RequestBody ChatEventDTO dto) {
+    public ResponseEntity<Void> addChatEvent(@RequestBody CreateChatEventDTO dto) {
         ChatEvent chatEvent = eventMapper.chatDTOToPojo(dto);
         eventService.addChatEvent(dto.getType(), dto.getRecipientIds(), chatEvent, dto.getUserIds());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/reminder")
-    public ResponseEntity<Void> addReminderEvent(@RequestBody ReminderEventDTO dto) {
+    public ResponseEntity<Void> addReminderEvent(@RequestBody CreateReminderEventDTO dto) {
         ReminderEvent reminderEvent = eventMapper.reminderDTOToPojo(dto);
         eventService.addReminderEvent(dto.getType(), dto.getRecipientIds(), reminderEvent);
         return ResponseEntity.status(HttpStatus.CREATED).build();

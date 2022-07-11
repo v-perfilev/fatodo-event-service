@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.model.dto;
+package com.persoff68.fatodo.model.dto.delete;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteGroupEventsDTO {
-    private UUID groupId;
+public class DeleteChatEventsDTO {
+    private UUID chatId;
 
     private UUID userId;
 }

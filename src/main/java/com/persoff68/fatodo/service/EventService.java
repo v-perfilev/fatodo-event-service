@@ -59,6 +59,7 @@ public class EventService {
         return eventRepository.countFromByUserId(userId, from);
     }
 
+    @Transactional
     public Date updateLastRead(UUID userId) {
         ReadStatus readStatus = readStatusRepository.findByUserId(userId)
                 .orElse(new ReadStatus(userId, new Date(0)));
@@ -68,6 +69,7 @@ public class EventService {
         return from;
     }
 
+    @Transactional
     public void addDefaultEvent(EventType type, List<UUID> recipientIdList) {
         if (!type.isDefaultEvent()) {
             throw new ModelInvalidException();
@@ -76,6 +78,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addContactEvent(EventType type, List<UUID> recipientIdList, ContactEvent contactEvent) {
         if (!type.isContactEvent()) {
             throw new ModelInvalidException();
@@ -90,6 +93,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addItemEvent(EventType type, List<UUID> recipientIdList, ItemEvent itemEvent, List<UUID> userIdList) {
         if (!type.isItemEvent()) {
             throw new ModelInvalidException();
@@ -100,6 +104,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addCommentEvent(EventType type, List<UUID> recipientIdList, CommentEvent commentEvent) {
         if (!type.isCommentEvent()) {
             throw new ModelInvalidException();
@@ -110,6 +115,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addChatEvent(EventType type, List<UUID> recipientIdList, ChatEvent chatEvent, List<UUID> userIdList) {
         if (!type.isChatEvent()) {
             throw new ModelInvalidException();
@@ -120,6 +126,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addReminderEvent(EventType type, List<UUID> recipientIdList, ReminderEvent reminderEvent) {
         if (!type.isReminderEvent()) {
             throw new ModelInvalidException();

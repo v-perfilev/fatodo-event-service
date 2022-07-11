@@ -1,17 +1,17 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.CommentEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TestCommentEventDTO extends CommentEventDTO {
+public class TestCreateCommentEventDTO extends CreateCommentEventDTO {
 
     @Builder
-    public TestCommentEventDTO(EventType eventType, UUID userId, UUID parentId, UUID targetId, UUID commentId,
-                               String reaction, List<UUID> recipientIds) {
+    public TestCreateCommentEventDTO(EventType eventType, UUID userId, UUID parentId, UUID targetId, UUID commentId,
+                                     String reaction, List<UUID> recipientIds) {
         super();
         super.setType(eventType);
         super.setUserId(userId);
@@ -22,8 +22,8 @@ public class TestCommentEventDTO extends CommentEventDTO {
         super.setRecipientIds(recipientIds);
     }
 
-    public static TestCommentEventDTOBuilder defaultBuilder() {
-        return TestCommentEventDTO.builder()
+    public static TestCreateCommentEventDTOBuilder defaultBuilder() {
+        return TestCreateCommentEventDTO.builder()
                 .eventType(EventType.COMMENT_ADD)
                 .userId(UUID.randomUUID())
                 .parentId(UUID.randomUUID())
@@ -32,8 +32,8 @@ public class TestCommentEventDTO extends CommentEventDTO {
                 .recipientIds(List.of(UUID.randomUUID()));
     }
 
-    public CommentEventDTO toParent() {
-        CommentEventDTO dto = new CommentEventDTO();
+    public CreateCommentEventDTO toParent() {
+        CreateCommentEventDTO dto = new CreateCommentEventDTO();
         dto.setType(getType());
         dto.setUserId(getUserId());
         dto.setParentId(getParentId());

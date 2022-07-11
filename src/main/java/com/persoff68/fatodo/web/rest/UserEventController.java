@@ -2,7 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.PageableReadableList;
-import com.persoff68.fatodo.model.dto.UserEventDTO;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.mapper.EventMapper;
 import com.persoff68.fatodo.repository.OffsetPageRequest;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
@@ -32,7 +32,7 @@ public class UserEventController {
     private final EventMapper eventMapper;
 
     @GetMapping
-    public ResponseEntity<PageableReadableList<UserEventDTO>> getEventsPageable(
+    public ResponseEntity<PageableReadableList<EventDTO>> getEventsPageable(
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer size
     ) {
@@ -41,10 +41,10 @@ public class UserEventController {
         size = Optional.ofNullable(size).orElse(DEFAULT_SIZE);
         Pageable pageRequest = OffsetPageRequest.of(offset, size);
         PageableReadableList<Event> eventPageableList = eventService.getAllPageable(userId, pageRequest);
-        List<UserEventDTO> dtoList = eventPageableList.getData().stream()
+        List<EventDTO> dtoList = eventPageableList.getData().stream()
                 .map(eventMapper::pojoToDTO)
                 .toList();
-        PageableReadableList<UserEventDTO> dtoPageableList = PageableReadableList.of(dtoList,
+        PageableReadableList<EventDTO> dtoPageableList = PageableReadableList.of(dtoList,
                 eventPageableList.getCount(), eventPageableList.getCount());
         return ResponseEntity.ok(dtoPageableList);
     }

@@ -9,16 +9,16 @@ import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ReminderEvent;
-import com.persoff68.fatodo.model.dto.ChatEventDTO;
-import com.persoff68.fatodo.model.dto.CommentEventDTO;
-import com.persoff68.fatodo.model.dto.ContactEventDTO;
-import com.persoff68.fatodo.model.dto.DeleteChatEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteContactEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.dto.ItemEventDTO;
-import com.persoff68.fatodo.model.dto.ReminderEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import com.persoff68.fatodo.model.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.Getter;
@@ -76,7 +76,7 @@ public class EventConsumer {
 
     private void handleDefaultEvent(String value) {
         try {
-            EventDTO dto = objectMapper.readValue(value, EventDTO.class);
+            CreateEventDTO dto = objectMapper.readValue(value, CreateEventDTO.class);
             eventService.addDefaultEvent(dto.getType(), dto.getRecipientIds());
         } catch (JsonProcessingException e) {
             throw new KafkaException();
@@ -85,7 +85,7 @@ public class EventConsumer {
 
     private void handleContactEvent(String value) {
         try {
-            ContactEventDTO dto = objectMapper.readValue(value, ContactEventDTO.class);
+            CreateContactEventDTO dto = objectMapper.readValue(value, CreateContactEventDTO.class);
             ContactEvent contactEvent = eventMapper.contactDTOToPojo(dto);
             eventService.addContactEvent(dto.getType(), dto.getRecipientIds(), contactEvent);
         } catch (JsonProcessingException e) {
@@ -95,7 +95,7 @@ public class EventConsumer {
 
     private void handleItemEvent(String value) {
         try {
-            ItemEventDTO dto = objectMapper.readValue(value, ItemEventDTO.class);
+            CreateItemEventDTO dto = objectMapper.readValue(value, CreateItemEventDTO.class);
             ItemEvent itemEvent = eventMapper.itemDTOToPojo(dto);
             eventService.addItemEvent(dto.getType(), dto.getRecipientIds(), itemEvent, dto.getUserIds());
         } catch (JsonProcessingException e) {
@@ -105,7 +105,7 @@ public class EventConsumer {
 
     private void handleCommentEvent(String value) {
         try {
-            CommentEventDTO dto = objectMapper.readValue(value, CommentEventDTO.class);
+            CreateCommentEventDTO dto = objectMapper.readValue(value, CreateCommentEventDTO.class);
             CommentEvent commentEvent = eventMapper.commentDTOToPojo(dto);
             eventService.addCommentEvent(dto.getType(), dto.getRecipientIds(), commentEvent);
         } catch (JsonProcessingException e) {
@@ -115,7 +115,7 @@ public class EventConsumer {
 
     private void handleChatEvent(String value) {
         try {
-            ChatEventDTO dto = objectMapper.readValue(value, ChatEventDTO.class);
+            CreateChatEventDTO dto = objectMapper.readValue(value, CreateChatEventDTO.class);
             ChatEvent chatEvent = eventMapper.chatDTOToPojo(dto);
             eventService.addChatEvent(dto.getType(), dto.getRecipientIds(), chatEvent, dto.getUserIds());
         } catch (JsonProcessingException e) {
@@ -125,7 +125,7 @@ public class EventConsumer {
 
     private void handleReminderEvent(String value) {
         try {
-            ReminderEventDTO dto = objectMapper.readValue(value, ReminderEventDTO.class);
+            CreateReminderEventDTO dto = objectMapper.readValue(value, CreateReminderEventDTO.class);
             ReminderEvent reminderEvent = eventMapper.reminderDTOToPojo(dto);
             eventService.addReminderEvent(dto.getType(), dto.getRecipientIds(), reminderEvent);
         } catch (JsonProcessingException e) {

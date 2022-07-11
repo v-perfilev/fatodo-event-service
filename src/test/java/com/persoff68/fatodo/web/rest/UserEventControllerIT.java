@@ -11,7 +11,7 @@ import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.PageableReadableList;
 import com.persoff68.fatodo.model.ReadStatus;
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.UserEventDTO;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
@@ -76,8 +76,8 @@ class UserEventControllerIT {
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         JavaType javaType = objectMapper.getTypeFactory()
-                .constructParametricType(PageableReadableList.class, UserEventDTO.class);
-        PageableReadableList<UserEventDTO> dtoList = objectMapper.readValue(resultString, javaType);
+                .constructParametricType(PageableReadableList.class, EventDTO.class);
+        PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(2);
         assertThat(dtoList.getCount()).isEqualTo(2);
         assertThat(dtoList.getUnread()).isEqualTo(2);
@@ -91,8 +91,8 @@ class UserEventControllerIT {
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         JavaType javaType = objectMapper.getTypeFactory()
-                .constructParametricType(PageableReadableList.class, UserEventDTO.class);
-        PageableReadableList<UserEventDTO> dtoList = objectMapper.readValue(resultString, javaType);
+                .constructParametricType(PageableReadableList.class, EventDTO.class);
+        PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(1);
         assertThat(dtoList.getCount()).isEqualTo(2);
         assertThat(dtoList.getUnread()).isEqualTo(2);

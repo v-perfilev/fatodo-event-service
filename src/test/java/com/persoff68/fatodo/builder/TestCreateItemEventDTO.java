@@ -1,17 +1,17 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.ItemEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TestItemEventDTO extends ItemEventDTO {
+public class TestCreateItemEventDTO extends CreateItemEventDTO {
 
     @Builder
-    public TestItemEventDTO(EventType eventType, UUID userId, UUID groupId, UUID itemId,
-                            List<UUID> userIds, List<UUID> recipientIds) {
+    public TestCreateItemEventDTO(EventType eventType, UUID userId, UUID groupId, UUID itemId,
+                                  List<UUID> userIds, List<UUID> recipientIds) {
         super();
         super.setType(eventType);
         super.setUserId(userId);
@@ -21,8 +21,8 @@ public class TestItemEventDTO extends ItemEventDTO {
         super.setRecipientIds(recipientIds);
     }
 
-    public static TestItemEventDTOBuilder defaultBuilder() {
-        return TestItemEventDTO.builder()
+    public static TestCreateItemEventDTOBuilder defaultBuilder() {
+        return TestCreateItemEventDTO.builder()
                 .eventType(EventType.ITEM_CREATE)
                 .userId(UUID.randomUUID())
                 .groupId(UUID.randomUUID())
@@ -31,8 +31,8 @@ public class TestItemEventDTO extends ItemEventDTO {
                 .recipientIds(List.of(UUID.randomUUID()));
     }
 
-    public ItemEventDTO toParent() {
-        ItemEventDTO dto = new ItemEventDTO();
+    public CreateItemEventDTO toParent() {
+        CreateItemEventDTO dto = new CreateItemEventDTO();
         dto.setType(getType());
         dto.setUserId(getUserId());
         dto.setGroupId(getGroupId());

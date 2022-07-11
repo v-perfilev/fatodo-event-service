@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.model.dto;
+package com.persoff68.fatodo.model.dto.delete;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

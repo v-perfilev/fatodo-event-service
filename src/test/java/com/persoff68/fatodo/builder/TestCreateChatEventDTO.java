@@ -1,17 +1,17 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.model.dto.ChatEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TestChatEventDTO extends ChatEventDTO {
+public class TestCreateChatEventDTO extends CreateChatEventDTO {
 
     @Builder
-    public TestChatEventDTO(EventType eventType, UUID userId, UUID chatId, UUID messageId, String reaction,
-                            List<UUID> userIds, List<UUID> recipientIds) {
+    public TestCreateChatEventDTO(EventType eventType, UUID userId, UUID chatId, UUID messageId, String reaction,
+                                  List<UUID> userIds, List<UUID> recipientIds) {
         super();
         super.setType(eventType);
         super.setUserId(userId);
@@ -22,8 +22,8 @@ public class TestChatEventDTO extends ChatEventDTO {
         super.setRecipientIds(recipientIds);
     }
 
-    public static TestChatEventDTOBuilder defaultBuilder() {
-        return TestChatEventDTO.builder()
+    public static TestCreateChatEventDTOBuilder defaultBuilder() {
+        return TestCreateChatEventDTO.builder()
                 .eventType(EventType.CHAT_CREATE)
                 .userId(UUID.randomUUID())
                 .chatId(UUID.randomUUID())
@@ -31,8 +31,8 @@ public class TestChatEventDTO extends ChatEventDTO {
                 .recipientIds(List.of(UUID.randomUUID()));
     }
 
-    public ChatEventDTO toParent() {
-        ChatEventDTO dto = new ChatEventDTO();
+    public CreateChatEventDTO toParent() {
+        CreateChatEventDTO dto = new CreateChatEventDTO();
         dto.setType(getType());
         dto.setUserId(getUserId());
         dto.setChatId(getChatId());

@@ -13,6 +13,7 @@ import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
+import com.persoff68.fatodo.service.ws.WsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +43,8 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
-
     private final ReadStatusRepository readStatusRepository;
+    private final WsService wsService;
 
     public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
         Date lastReadAt = updateLastRead(userId);
@@ -75,7 +76,8 @@ public class EventService {
             throw new ModelInvalidException();
         }
         Event event = new Event(type, recipientIdList);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional
@@ -90,7 +92,8 @@ public class EventService {
         Event event = new Event(type, recipientIdList);
         contactEvent.setEvent(event);
         event.setContactEvent(contactEvent);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional
@@ -101,7 +104,8 @@ public class EventService {
         Event event = new Event(type, recipientIdList);
         itemEvent = new ItemEvent(event, itemEvent, userIdList);
         event.setItemEvent(itemEvent);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional
@@ -112,7 +116,8 @@ public class EventService {
         Event event = new Event(type, recipientIdList);
         commentEvent.setEvent(event);
         event.setCommentEvent(commentEvent);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional
@@ -123,7 +128,8 @@ public class EventService {
         Event event = new Event(type, recipientIdList);
         chatEvent = new ChatEvent(event, chatEvent, userIdList);
         event.setChatEvent(chatEvent);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional
@@ -134,7 +140,8 @@ public class EventService {
         Event event = new Event(type, recipientIdList);
         reminderEvent = new ReminderEvent(event, reminderEvent);
         event.setReminderEvent(reminderEvent);
-        eventRepository.save(event);
+        event = eventRepository.save(event);
+        wsService.sendEvent(event);
     }
 
     @Transactional

@@ -26,7 +26,7 @@
 
         </createTable>
 
-        <createIndex indexName="index_event_contact" tableName="ftd_event_contact">
+        <createIndex indexName="index_event_contact_event" tableName="ftd_event_contact">
             <column name="event_id"/>
         </createIndex>
 

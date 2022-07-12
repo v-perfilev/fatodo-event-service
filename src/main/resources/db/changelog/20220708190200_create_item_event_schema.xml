@@ -37,11 +37,11 @@
             </column>
         </createTable>
 
-        <createIndex indexName="index_event_item" tableName="ftd_event_item">
+        <createIndex indexName="index_event_item_event" tableName="ftd_event_item">
             <column name="event_id"/>
         </createIndex>
 
-        <createIndex indexName="index_event_item_user" tableName="ftd_event_item_user">
+        <createIndex indexName="index_event_item_user_item_event" tableName="ftd_event_item_user">
             <column name="item_event_id"/>
         </createIndex>
 

@@ -41,11 +41,11 @@
             </column>
         </createTable>
 
-        <createIndex indexName="index_event_chat" tableName="ftd_event_chat">
+        <createIndex indexName="index_event_chat_event" tableName="ftd_event_chat">
             <column name="event_id"/>
         </createIndex>
 
-        <createIndex indexName="index_event_chat_user" tableName="ftd_event_chat_user">
+        <createIndex indexName="index_event_chat_user_chat_event" tableName="ftd_event_chat_user">
             <column name="chat_event_id"/>
         </createIndex>
 

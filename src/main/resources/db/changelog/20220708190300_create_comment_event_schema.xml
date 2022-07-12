@@ -36,7 +36,7 @@
 
         </createTable>
 
-        <createIndex indexName="index_event_comment" tableName="ftd_event_comment">
+        <createIndex indexName="index_event_comment_event" tableName="ftd_event_comment">
             <column name="event_id"/>
         </createIndex>
 

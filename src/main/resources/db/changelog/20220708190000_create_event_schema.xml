@@ -32,7 +32,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="index_event_recipient" tableName="ftd_event_recipient">
+        <createIndex indexName="index_event_recipient_user" tableName="ftd_event_recipient">
             <column name="user_id"/>
         </createIndex>
 

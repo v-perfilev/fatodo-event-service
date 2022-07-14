@@ -21,6 +21,7 @@ public class UserEventService {
     private final EventRepository eventRepository;
     private final ReadStatusRepository readStatusRepository;
 
+    @Transactional
     public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
         Date lastReadAt = updateLastRead(userId);
         Page<Event> eventPage = eventRepository.findAllByUserId(userId, pageable);

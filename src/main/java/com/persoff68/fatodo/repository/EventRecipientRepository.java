@@ -18,8 +18,10 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er join ItemEvent ie on er.event.id = ie.event.id where ie.groupId = :groupId)
+            and r in (select er from EventRecipient er
+                join Event e on er.event.id = e.id where e.type in :eventTypes)
+            and r in (select er from EventRecipient er
+                join ItemEvent ie on er.event.id = ie.event.id where ie.groupId = :groupId)
             """)
     void deleteGroupEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
                                     @Param("groupId") UUID groupId,
@@ -29,8 +31,10 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er join CommentEvent ce on er.event.id = ce.event.id where ce.parentId = :parentId)
+            and r in (select er from EventRecipient er
+                join Event e on er.event.id = e.id where e.type in :eventTypes)
+            and r in (select er from EventRecipient er
+                join CommentEvent ce on er.event.id = ce.event.id where ce.parentId = :parentId)
             """)
     void deleteCommentEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
                                       @Param("parentId") UUID parentId,
@@ -40,8 +44,10 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er join ChatEvent ce on er.event.id = ce.event.id where ce.chatId = :chatId)
+            and r in (select er from EventRecipient er
+                join Event e on er.event.id = e.id where e.type in :eventTypes)
+            and r in (select er from EventRecipient er
+                join ChatEvent ce on er.event.id = ce.event.id where ce.chatId = :chatId)
             """)
     void deleteChatEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
                                    @Param("chatId") UUID chatId,
@@ -51,8 +57,10 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er join ReminderEvent re on er.event.id = re.event.id where re.groupId = :groupId)
+            and r in (select er from EventRecipient er
+                join Event e on er.event.id = e.id where e.type in :eventTypes)
+            and r in (select er from EventRecipient er
+                join ReminderEvent re on er.event.id = re.event.id where re.groupId = :groupId)
             """)
     void deleteReminderEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
                                        @Param("groupId") UUID groupId,

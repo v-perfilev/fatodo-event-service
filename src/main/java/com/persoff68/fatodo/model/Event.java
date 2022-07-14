@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Event extends AbstractAuditingModel {
+public class Event extends AbstractAuditingModel implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private EventType type;

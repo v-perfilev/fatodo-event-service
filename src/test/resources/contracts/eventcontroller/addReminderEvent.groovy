@@ -3,7 +3,7 @@ package contracts.eventcontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'add item event'
+    name 'add reminder event'
     description 'should return status 201'
     request {
         method POST()

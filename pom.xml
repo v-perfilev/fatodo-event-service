@@ -177,6 +177,13 @@
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
+
+            <!-- Spring Kafka Test management -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka-test</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

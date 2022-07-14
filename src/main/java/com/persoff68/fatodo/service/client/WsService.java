@@ -1,11 +1,11 @@
-package com.persoff68.fatodo.service.ws;
+package com.persoff68.fatodo.service.client;
 
 import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.WsEventDTO;
-import com.persoff68.fatodo.model.mapper.EventMapper;
+import com.persoff68.fatodo.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

@@ -15,7 +15,7 @@ import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
-import com.persoff68.fatodo.model.mapper.EventMapper;
+import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

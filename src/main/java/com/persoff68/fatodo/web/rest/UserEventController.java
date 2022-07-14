@@ -1,13 +1,13 @@
 package com.persoff68.fatodo.web.rest;
 
+import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.PageableReadableList;
 import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.mapper.EventMapper;
 import com.persoff68.fatodo.repository.OffsetPageRequest;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
-import com.persoff68.fatodo.service.EventService;
+import com.persoff68.fatodo.service.UserEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class UserEventController {
 
     private static final int DEFAULT_SIZE = 30;
 
-    private final EventService eventService;
+    private final UserEventService userEventService;
     private final EventMapper eventMapper;
 
     @GetMapping
@@ -40,7 +40,7 @@ public class UserEventController {
         offset = Optional.ofNullable(offset).orElse(0);
         size = Optional.ofNullable(size).orElse(DEFAULT_SIZE);
         Pageable pageRequest = OffsetPageRequest.of(offset, size);
-        PageableReadableList<Event> eventPageableList = eventService.getAllPageable(userId, pageRequest);
+        PageableReadableList<Event> eventPageableList = userEventService.getAllPageable(userId, pageRequest);
         List<EventDTO> dtoList = eventPageableList.getData().stream()
                 .map(eventMapper::pojoToDTO)
                 .toList();
@@ -52,14 +52,14 @@ public class UserEventController {
     @GetMapping("/unread-count")
     public ResponseEntity<Long> getUnreadCount() {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        long unreadCount = eventService.getUnreadCount(userId);
+        long unreadCount = userEventService.getUnreadCount(userId);
         return ResponseEntity.ok(unreadCount);
     }
 
     @GetMapping("/refresh")
     public ResponseEntity<Void> refresh() {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        eventService.updateLastRead(userId);
+        userEventService.updateLastRead(userId);
         return ResponseEntity.ok().build();
     }
 

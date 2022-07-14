@@ -19,7 +19,7 @@ import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
-import com.persoff68.fatodo.model.mapper.EventMapper;
+import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

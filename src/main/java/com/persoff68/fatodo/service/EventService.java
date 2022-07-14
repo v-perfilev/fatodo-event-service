@@ -5,23 +5,17 @@ import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.ItemEvent;
-import com.persoff68.fatodo.model.PageableReadableList;
-import com.persoff68.fatodo.model.ReadStatus;
 import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
-import com.persoff68.fatodo.repository.ReadStatusRepository;
+import com.persoff68.fatodo.service.client.WsService;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
-import com.persoff68.fatodo.service.ws.WsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,32 +37,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
-    private final ReadStatusRepository readStatusRepository;
     private final WsService wsService;
-
-    public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
-        Date lastReadAt = updateLastRead(userId);
-        Page<Event> eventPage = eventRepository.findAllByUserId(userId, pageable);
-        long unreadCount = eventRepository.countFromByUserId(userId, lastReadAt);
-        return PageableReadableList.of(eventPage.getContent(), eventPage.getTotalElements(), unreadCount);
-    }
-
-    public long getUnreadCount(UUID userId) {
-        ReadStatus readStatus = readStatusRepository.findByUserId(userId)
-                .orElse(new ReadStatus(userId, new Date(0)));
-        Date from = readStatus.getLastReadAt();
-        return eventRepository.countFromByUserId(userId, from);
-    }
-
-    @Transactional
-    public Date updateLastRead(UUID userId) {
-        ReadStatus readStatus = readStatusRepository.findByUserId(userId)
-                .orElse(new ReadStatus(userId, new Date(0)));
-        Date from = readStatus.getLastReadAt();
-        readStatus.setLastReadAt(new Date());
-        readStatusRepository.save(readStatus);
-        return from;
-    }
 
     @Transactional
     public void addDefaultEvent(EventType type, List<UUID> recipientIdList) {

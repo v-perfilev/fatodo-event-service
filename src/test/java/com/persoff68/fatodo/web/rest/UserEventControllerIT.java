@@ -16,6 +16,7 @@ import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
 import com.persoff68.fatodo.service.EventService;
+import com.persoff68.fatodo.service.UserEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ class UserEventControllerIT {
 
     @Autowired
     EventService eventService;
+    @Autowired
+    UserEventService userEventService;
     @Autowired
     EventRepository eventRepository;
     @Autowired
@@ -140,7 +143,7 @@ class UserEventControllerIT {
                 .matches(d -> d.after(Date.from(before)))
                 .matches(d -> d.before(Date.from(after)));
 
-        long unreadCount = eventService.getUnreadCount(UUID.fromString(USER_ID));
+        long unreadCount = userEventService.getUnreadCount(UUID.fromString(USER_ID));
         assertThat(unreadCount).isEqualTo(0);
     }
 

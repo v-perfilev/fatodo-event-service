@@ -144,7 +144,7 @@ class UserEventControllerIT {
                 .matches(d -> d.before(Date.from(after)));
 
         long unreadCount = userEventService.getUnreadCount(UUID.fromString(USER_ID));
-        assertThat(unreadCount).isEqualTo(0);
+        assertThat(unreadCount).isZero();
     }
 
     @Test

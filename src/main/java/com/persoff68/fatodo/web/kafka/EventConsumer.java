@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.exception.KafkaException;
+import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
@@ -13,13 +14,12 @@ import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
-import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.service.EventService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +38,9 @@ import java.util.concurrent.CountDownLatch;
 @ConditionalOnPropertyNotNull(value = "kafka.bootstrapAddress")
 public class EventConsumer {
 
+    private static final String EVENT_ADD_TOPIC = "event_add";
+    private static final String EVENT_DELETE_TOPIC = "event_delete";
+
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final ObjectMapper objectMapper;
@@ -45,7 +48,7 @@ public class EventConsumer {
     @Getter
     private CountDownLatch latch = new CountDownLatch(1);
 
-    @KafkaListener(topics = "event_add", containerFactory = "addContainerFactory")
+    @KafkaListener(topics = EVENT_ADD_TOPIC, containerFactory = "addContainerFactory")
     public void addEvent(@Payload String value, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key) {
         switch (key) {
             case "default" -> handleDefaultEvent(value);
@@ -59,7 +62,7 @@ public class EventConsumer {
         resetLatch();
     }
 
-    @KafkaListener(topics = "event_delete", containerFactory = "deleteContainerFactory")
+    @KafkaListener(topics = EVENT_DELETE_TOPIC, containerFactory = "deleteContainerFactory")
     public void deleteEvent(@Payload String value, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key) {
         switch (key) {
             case "group-delete-user" -> handleDeleteGroupEventsForUser(value);

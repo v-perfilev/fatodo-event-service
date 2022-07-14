@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verify;
 })
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-public class WsProducerIT {
+class WsProducerIT {
 
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;
@@ -81,7 +81,7 @@ public class WsProducerIT {
 
         ConsumerRecord<String, WsEventDTO<EventDTO>> record = wsRecords.poll(10, TimeUnit.SECONDS);
 
-        assertThat(wsServiceClient instanceof WsProducer).isTrue();
+        assertThat(wsServiceClient).isInstanceOf(WsProducer.class);
         assertThat(record).isNotNull();
         assertThat(record.topic()).isEqualTo("ws_event");
         verify(wsServiceClient).sendEvent(any());

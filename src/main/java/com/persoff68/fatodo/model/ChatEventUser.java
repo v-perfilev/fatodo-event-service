@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(ChatEventUser.ChatEventUserId.class)
 @ToString(exclude = {"chatEvent"})
-public class ChatEventUser {
+public class ChatEventUser implements Serializable {
 
     @Id
     @ManyToOne

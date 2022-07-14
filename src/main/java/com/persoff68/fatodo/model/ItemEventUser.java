@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(ItemEventUser.ItemEventUserId.class)
 @ToString(exclude = {"itemEvent"})
-public class ItemEventUser {
+public class ItemEventUser implements Serializable {
 
     @Id
     @ManyToOne

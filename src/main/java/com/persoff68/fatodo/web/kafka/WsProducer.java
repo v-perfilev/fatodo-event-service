@@ -13,10 +13,12 @@ import org.springframework.stereotype.Component;
 @ConditionalOnPropertyNotNull(value = "kafka.bootstrapAddress")
 public class WsProducer implements WsServiceClient {
 
+    private static final String WS_EVENT_TOPIC = "ws_event";
+
     private final KafkaTemplate<String, WsEventDTO<EventDTO>> wsEventKafkaTemplate;
 
     public void sendEvent(WsEventDTO<EventDTO> event) {
-        wsEventKafkaTemplate.send("ws_event", event);
+        wsEventKafkaTemplate.send(WS_EVENT_TOPIC, event);
     }
 
 }

@@ -18,7 +18,7 @@ Contract.make {
         body(
                 "type": $(
                         consumer(anyNonBlankString()),
-                        producer("ITEM_CREATE")
+                        producer("REMINDER")
                 ),
                 "recipientIds": $(
                         consumer(any()),

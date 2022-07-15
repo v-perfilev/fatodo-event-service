@@ -22,7 +22,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(EventRecipient.EventRecipientId.class)
 @ToString(exclude = {"event"})
-public class EventRecipient {
+public class EventRecipient implements Serializable {
+    @Serial
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @Id
     @ManyToOne

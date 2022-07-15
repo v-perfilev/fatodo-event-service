@@ -22,7 +22,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(ChatEventUser.ChatEventUserId.class)
 @ToString(exclude = {"chatEvent"})
-public class ChatEventUser {
+public class ChatEventUser implements Serializable {
+    @Serial
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @Id
     @ManyToOne

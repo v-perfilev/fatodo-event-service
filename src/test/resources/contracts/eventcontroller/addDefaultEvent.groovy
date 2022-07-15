@@ -15,8 +15,8 @@ Contract.make {
                     producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAiLCJ1c2VybmFtZSI6InRlc3Rfc3lzdGVtIiwiYXV0aG9yaXRpZXMiOiJST0xFX1NZU1RFTSIsImlhdCI6MCwiZXhwIjozMjUwMzY3NjQwMH0.roNFKrM7NjEzXvRFRHlJXw0YxSFZ-4Afqvn7eFatpGF14olhXBvCvR9CkPkmlnlCAOYbpDO18krfi6SEX0tQ6Q")
             )
         }
-        body(
-                "type": $(
+        body([
+                "type"        : $(
                         consumer(anyNonBlankString()),
                         producer("WELCOME")
                 ),
@@ -24,7 +24,7 @@ Contract.make {
                         consumer(any()),
                         producer([anyUuid()])
                 ),
-        )
+        ])
     }
     response {
         status 201

@@ -10,13 +10,12 @@ import com.persoff68.fatodo.config.util.KafkaUtils;
 import com.persoff68.fatodo.model.dto.create.CreateChatEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
-import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
 import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteUserEventsDTO;
 import com.persoff68.fatodo.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -123,7 +122,7 @@ class EventConsumerIT {
 
     @Test
     void testDeleteGroupEventsForUser() throws InterruptedException {
-        DeleteGroupEventsDTO dto = new DeleteGroupEventsDTO(UUID.randomUUID(), UUID.randomUUID());
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), UUID.randomUUID());
         kafkaTemplate.send("event_delete", "group-delete-user", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
@@ -133,7 +132,7 @@ class EventConsumerIT {
 
     @Test
     void testDeleteChatEventsForUser() throws InterruptedException {
-        DeleteChatEventsDTO dto = new DeleteChatEventsDTO(UUID.randomUUID(), UUID.randomUUID());
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), UUID.randomUUID());
         kafkaTemplate.send("event_delete", "chat-delete-user", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 

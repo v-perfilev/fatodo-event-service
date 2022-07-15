@@ -3,13 +3,13 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoEventServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
-import com.persoff68.fatodo.builder.TestCreateChatEventDTO;
 import com.persoff68.fatodo.builder.TestChatEvent;
 import com.persoff68.fatodo.builder.TestChatEventUser;
-import com.persoff68.fatodo.builder.TestCreateCommentEventDTO;
 import com.persoff68.fatodo.builder.TestCommentEvent;
-import com.persoff68.fatodo.builder.TestCreateContactEventDTO;
 import com.persoff68.fatodo.builder.TestContactEvent;
+import com.persoff68.fatodo.builder.TestCreateChatEventDTO;
+import com.persoff68.fatodo.builder.TestCreateCommentEventDTO;
+import com.persoff68.fatodo.builder.TestCreateContactEventDTO;
 import com.persoff68.fatodo.builder.TestCreateEventDTO;
 import com.persoff68.fatodo.builder.TestCreateItemEventDTO;
 import com.persoff68.fatodo.builder.TestCreateReminderEventDTO;
@@ -33,11 +33,10 @@ import com.persoff68.fatodo.model.dto.create.CreateCommentEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
+import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
-import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteUserEventsDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
@@ -356,7 +355,7 @@ class EventControllerIT {
     @Transactional
     void testDeleteGroupAndCommentEventsForUser_ok() throws Exception {
         String url = ENDPOINT + "/group/delete-user";
-        DeleteGroupEventsDTO dto = new DeleteGroupEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -385,7 +384,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testDeleteGroupAndCommentEventsForUser_unauthorized() throws Exception {
         String url = ENDPOINT + "/group/delete-user";
-        DeleteGroupEventsDTO dto = new DeleteGroupEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -399,7 +398,7 @@ class EventControllerIT {
     @Transactional
     void testDeleteChatEventsForUser_ok() throws Exception {
         String url = ENDPOINT + "/chat/delete-user";
-        DeleteChatEventsDTO dto = new DeleteChatEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -420,7 +419,7 @@ class EventControllerIT {
     @WithAnonymousUser
     void testDeleteChatEventsForUser_unauthorized() throws Exception {
         String url = ENDPOINT + "/chat/delete-user";
-        DeleteChatEventsDTO dto = new DeleteChatEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)

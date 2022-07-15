@@ -16,10 +16,9 @@ import com.persoff68.fatodo.model.dto.create.CreateContactEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateItemEventDTO;
 import com.persoff68.fatodo.model.dto.create.CreateReminderEventDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteChatEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteContactEventsDTO;
 import com.persoff68.fatodo.model.dto.delete.DeleteEventsDTO;
-import com.persoff68.fatodo.model.dto.delete.DeleteGroupEventsDTO;
+import com.persoff68.fatodo.model.dto.delete.DeleteUserEventsDTO;
 import com.persoff68.fatodo.service.EventService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -139,9 +138,9 @@ public class EventConsumer {
 
     private void handleDeleteGroupEventsForUser(String value) {
         try {
-            DeleteGroupEventsDTO dto = objectMapper.readValue(value, DeleteGroupEventsDTO.class);
+            DeleteUserEventsDTO dto = objectMapper.readValue(value, DeleteUserEventsDTO.class);
             List<UUID> userIdList = List.of(dto.getUserId());
-            eventService.deleteGroupEventsForUser(dto.getGroupId(), userIdList);
+            eventService.deleteGroupEventsForUser(dto.getId(), userIdList);
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }
@@ -149,9 +148,9 @@ public class EventConsumer {
 
     private void handleDeleteChatEventsForUser(String value) {
         try {
-            DeleteChatEventsDTO dto = objectMapper.readValue(value, DeleteChatEventsDTO.class);
+            DeleteUserEventsDTO dto = objectMapper.readValue(value, DeleteUserEventsDTO.class);
             List<UUID> userIdList = List.of(dto.getUserId());
-            eventService.deleteChatEventsForUser(dto.getChatId(), userIdList);
+            eventService.deleteChatEventsForUser(dto.getId(), userIdList);
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }

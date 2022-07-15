@@ -7,8 +7,11 @@ import java.util.List;
 
 @Data
 public class PageableReadableList<T> {
+
     private List<T> data;
+
     private long count;
+
     private long unread;
 
     public static <T> PageableReadableList<T> of(List<T> data, long count, long unread) {

@@ -10,6 +10,7 @@ import java.util.UUID;
 public class ContactEventDTO {
 
     private UUID firstUserId;
+
     private UUID secondUserId;
 
 }

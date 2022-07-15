@@ -1,6 +1,5 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -21,9 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"event"}, callSuper = true)
 @ToString(exclude = {"event"})
-public class ReminderEvent extends AbstractModel implements Serializable {
-    @Serial
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
+public class ReminderEvent extends AbstractModel {
 
     @OneToOne
     @JoinColumn(name = "event_id")

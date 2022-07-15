@@ -1,6 +1,5 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,9 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"event"}, callSuper = true)
 @ToString(exclude = {"event"})
-public class ChatEvent extends AbstractModel implements Serializable {
-    @Serial
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
+public class ChatEvent extends AbstractModel {
 
     @OneToOne
     @JoinColumn(name = "event_id")
@@ -43,7 +38,7 @@ public class ChatEvent extends AbstractModel implements Serializable {
     private String reaction;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "chatEvent", orphanRemoval = true)
-    private transient List<ChatEventUser> users;
+    private List<ChatEventUser> users;
 
     public ChatEvent(Event event, ChatEvent chatEvent, List<UUID> userIdList) {
         this.event = event;

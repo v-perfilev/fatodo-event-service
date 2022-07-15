@@ -37,7 +37,7 @@ public class ItemEvent extends AbstractModel implements Serializable {
     private UUID itemId;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "itemEvent", orphanRemoval = true)
-    private List<ItemEventUser> users;
+    private transient List<ItemEventUser> users;
 
     public ItemEvent(Event event, ItemEvent itemEvent, List<UUID> userIdList) {
         this.event = event;

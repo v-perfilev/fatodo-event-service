@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -20,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(EventRecipient.EventRecipientId.class)
 @ToString(exclude = {"event"})
-public class EventRecipient implements Serializable {
+public class EventRecipient {
 
     @Id
     @ManyToOne
@@ -33,6 +35,9 @@ public class EventRecipient implements Serializable {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EventRecipientId implements Serializable {
+        @Serial
+        private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
+
         private Event event;
         private UUID userId;
     }

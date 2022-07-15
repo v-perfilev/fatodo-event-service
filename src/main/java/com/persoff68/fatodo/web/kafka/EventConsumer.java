@@ -141,7 +141,7 @@ public class EventConsumer {
         try {
             DeleteGroupEventsDTO dto = objectMapper.readValue(value, DeleteGroupEventsDTO.class);
             List<UUID> userIdList = List.of(dto.getUserId());
-            eventService.deleteGroupAndCommentEventsForUser(dto.getGroupId(), userIdList);
+            eventService.deleteGroupEventsForUser(dto.getGroupId(), userIdList);
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }
@@ -170,7 +170,7 @@ public class EventConsumer {
     private void handleDeleteGroupEvents(String value) {
         try {
             DeleteEventsDTO dto = objectMapper.readValue(value, DeleteEventsDTO.class);
-            eventService.deleteGroupAndCommentEvents(dto.getId());
+            eventService.deleteGroupEvents(dto.getId());
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }
@@ -179,7 +179,7 @@ public class EventConsumer {
     private void handleDeleteItemEvents(String value) {
         try {
             DeleteEventsDTO dto = objectMapper.readValue(value, DeleteEventsDTO.class);
-            eventService.deleteItemAndCommentEvents(dto.getId());
+            eventService.deleteItemEvents(dto.getId());
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }

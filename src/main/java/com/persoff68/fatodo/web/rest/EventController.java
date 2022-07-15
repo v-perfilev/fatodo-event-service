@@ -81,7 +81,7 @@ public class EventController {
     @PostMapping("/group/delete-user")
     public ResponseEntity<Void> deleteGroupAndCommentEventsForUser(@RequestBody DeleteGroupEventsDTO dto) {
         List<UUID> userIdList = List.of(dto.getUserId());
-        eventService.deleteGroupAndCommentEventsForUser(dto.getGroupId(), userIdList);
+        eventService.deleteGroupEventsForUser(dto.getGroupId(), userIdList);
         return ResponseEntity.ok().build();
     }
 
@@ -101,13 +101,13 @@ public class EventController {
 
     @PostMapping("/group/delete")
     public ResponseEntity<Void> deleteGroupEvents(@RequestBody DeleteEventsDTO dto) {
-        eventService.deleteGroupAndCommentEvents(dto.getId());
+        eventService.deleteGroupEvents(dto.getId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/item/delete")
     public ResponseEntity<Void> deleteItemEvents(@RequestBody DeleteEventsDTO dto) {
-        eventService.deleteItemAndCommentEvents(dto.getId());
+        eventService.deleteItemEvents(dto.getId());
         return ResponseEntity.ok().build();
     }
 

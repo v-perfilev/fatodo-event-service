@@ -128,7 +128,7 @@ class EventConsumerIT {
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();
-        verify(eventService, times(1)).deleteGroupAndCommentEventsForUser(any(), any());
+        verify(eventService, times(1)).deleteGroupEventsForUser(any(), any());
     }
 
     @Test
@@ -158,7 +158,7 @@ class EventConsumerIT {
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();
-        verify(eventService, times(1)).deleteGroupAndCommentEvents(any());
+        verify(eventService, times(1)).deleteGroupEvents(any());
     }
 
     @Test
@@ -168,7 +168,7 @@ class EventConsumerIT {
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();
-        verify(eventService, times(1)).deleteItemAndCommentEvents(any());
+        verify(eventService, times(1)).deleteItemEvents(any());
     }
 
     @Test

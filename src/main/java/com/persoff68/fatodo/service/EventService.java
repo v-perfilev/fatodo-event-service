@@ -114,7 +114,7 @@ public class EventService {
     }
 
     @Transactional
-    public void deleteGroupAndCommentEventsForUser(UUID groupId, List<UUID> userIdList) {
+    public void deleteGroupEventsForUser(UUID groupId, List<UUID> userIdList) {
         eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRecipientRepository.deleteCommentEventRecipients(COMMENT_EVENT_TYPES, groupId, userIdList);
@@ -135,14 +135,14 @@ public class EventService {
     }
 
     @Transactional
-    public void deleteItemAndCommentEvents(UUID itemId) {
+    public void deleteItemEvents(UUID itemId) {
         eventRepository.deleteItemEvents(ITEM_EVENT_TYPES, itemId);
         eventRepository.deleteCommentEventsByTargetId(COMMENT_EVENT_TYPES, itemId);
         eventRepository.deleteReminderEventsByItemId(REMINDER_EVENT_TYPES, itemId);
     }
 
     @Transactional
-    public void deleteGroupAndCommentEvents(UUID groupId) {
+    public void deleteGroupEvents(UUID groupId) {
         eventRepository.deleteGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRepository.deleteCommentEventsByParentId(COMMENT_EVENT_TYPES, groupId);
         eventRepository.deleteReminderEventsByGroupId(REMINDER_EVENT_TYPES, groupId);

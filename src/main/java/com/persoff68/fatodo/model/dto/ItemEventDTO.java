@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -21,6 +21,6 @@ public class ItemEventDTO implements Serializable {
 
     private UUID itemId;
 
-    private ArrayList<UUID> userIds;
+    private List<UUID> userIds;
 
 }

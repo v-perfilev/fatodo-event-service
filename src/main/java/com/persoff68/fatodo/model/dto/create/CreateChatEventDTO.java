@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,6 +29,6 @@ public class CreateChatEventDTO extends CreateEventDTO {
 
     private String reaction;
 
-    private ArrayList<UUID> userIds;
+    private List<UUID> userIds;
 
 }

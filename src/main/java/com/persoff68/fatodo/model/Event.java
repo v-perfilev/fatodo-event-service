@@ -31,22 +31,22 @@ public class Event extends AbstractAuditingModel implements Serializable {
     private EventType type;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient List<EventRecipient> recipients;
+    private List<EventRecipient> recipients;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient ContactEvent contactEvent;
+    private ContactEvent contactEvent;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient ItemEvent itemEvent;
+    private ItemEvent itemEvent;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient CommentEvent commentEvent;
+    private CommentEvent commentEvent;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient ChatEvent chatEvent;
+    private ChatEvent chatEvent;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-    private transient ReminderEvent reminderEvent;
+    private ReminderEvent reminderEvent;
 
     public Event(EventType type, List<UUID> recipientIdList) {
         this.type = type;

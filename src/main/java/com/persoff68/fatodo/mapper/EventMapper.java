@@ -40,12 +40,12 @@ public interface EventMapper {
     EventDTO pojoToDTO(Event event);
 
     @Named("itemUserIdsMapper")
-    static List<UUID> itemUsersToIds(List<ItemEventUser> itemEventUserList) {
+    static List<UUID> itemUserIdsMapper(List<ItemEventUser> itemEventUserList) {
         return itemEventUserList.stream().map(ItemEventUser::getUserId).toList();
     }
 
     @Named("chatUserIdsMapper")
-    static List<UUID> chatUsersToIds(List<ChatEventUser> chatEventUserList) {
+    static List<UUID> chatUserIdsMapper(List<ChatEventUser> chatEventUserList) {
         return chatEventUserList.stream().map(ChatEventUser::getUserId).toList();
     }
 

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -23,6 +23,6 @@ public class ChatEventDTO implements Serializable {
 
     private String reaction;
 
-    private ArrayList<UUID> userIds;
+    private List<UUID> userIds;
 
 }

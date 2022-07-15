@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,7 +17,7 @@ public class WsEventDTO<T extends Serializable> implements Serializable {
     @Serial
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    private ArrayList<UUID> userIds;
+    private List<UUID> userIds;
     private T content;
 
 }

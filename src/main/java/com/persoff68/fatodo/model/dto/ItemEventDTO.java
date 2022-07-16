@@ -18,4 +18,6 @@ public class ItemEventDTO {
 
     private List<UUID> userIds;
 
+    private String role;
+
 }

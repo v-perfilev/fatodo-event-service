@@ -79,13 +79,13 @@ public class EventController {
     }
 
     @PostMapping("/group/delete-users")
-    public ResponseEntity<Void> deleteGroupEventsForUser(@Valid @RequestBody DeleteUserEventsDTO dto) {
+    public ResponseEntity<Void> deleteGroupEventsForUsers(@Valid @RequestBody DeleteUserEventsDTO dto) {
         eventService.deleteGroupEventsForUser(dto.getId(), dto.getUserIds());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/chat/delete-users")
-    public ResponseEntity<Void> deleteChatEventsForUser(@Valid @RequestBody DeleteUserEventsDTO dto) {
+    public ResponseEntity<Void> deleteChatEventsForUsers(@Valid @RequestBody DeleteUserEventsDTO dto) {
         eventService.deleteChatEventsForUser(dto.getId(), dto.getUserIds());
         return ResponseEntity.ok().build();
     }

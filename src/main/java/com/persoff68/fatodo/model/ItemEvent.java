@@ -40,6 +40,8 @@ public class ItemEvent extends AbstractModel implements Serializable {
 
     private UUID itemId;
 
+    private String role;
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "itemEvent", orphanRemoval = true)
     private List<ItemEventUser> users;
 
@@ -48,6 +50,7 @@ public class ItemEvent extends AbstractModel implements Serializable {
         this.userId = itemEvent.userId;
         this.groupId = itemEvent.groupId;
         this.itemId = itemEvent.itemId;
+        this.role = itemEvent.role;
         this.users = userIdList.stream()
                 .distinct()
                 .map(userId -> new ItemEventUser(this, userId))

@@ -11,7 +11,6 @@ public enum EventType {
     // ITEM
     ITEM_CREATE,
     ITEM_UPDATE,
-    ITEM_DELETE,
     ITEM_GROUP_CREATE,
     ITEM_GROUP_UPDATE,
     ITEM_MEMBER_ADD,
@@ -50,7 +49,7 @@ public enum EventType {
 
     public boolean isItemEvent() {
         return switch (this) {
-            case ITEM_CREATE, ITEM_UPDATE, ITEM_DELETE, ITEM_GROUP_CREATE, ITEM_GROUP_UPDATE, ITEM_MEMBER_ADD,
+            case ITEM_CREATE, ITEM_UPDATE, ITEM_GROUP_CREATE, ITEM_GROUP_UPDATE, ITEM_MEMBER_ADD,
                     ITEM_MEMBER_DELETE, ITEM_MEMBER_LEAVE, ITEM_MEMBER_ROLE -> true;
             default -> false;
         };

@@ -24,6 +24,8 @@
 
             <column name="item_id" type="binary(16)"/>
 
+            <column name="role" type="varchar(16)"/>
+
         </createTable>
 
         <createTable tableName="ftd_event_item_user">

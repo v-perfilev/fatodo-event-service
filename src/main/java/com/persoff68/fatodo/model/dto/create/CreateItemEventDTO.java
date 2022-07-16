@@ -25,4 +25,6 @@ public class CreateItemEventDTO extends CreateEventDTO {
 
     private List<UUID> userIds;
 
+    private String role;
+
 }

@@ -353,9 +353,10 @@ class EventControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     @Transactional
-    void testDeleteGroupAndCommentEventsForUser_ok() throws Exception {
-        String url = ENDPOINT + "/group/delete-user";
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
+    void testDeleteGroupEventsForUsers_ok() throws Exception {
+        String url = ENDPOINT + "/group/delete-users";
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID),
+                List.of(UUID.fromString(USER_ID_1)));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -382,9 +383,10 @@ class EventControllerIT {
 
     @Test
     @WithAnonymousUser
-    void testDeleteGroupAndCommentEventsForUser_unauthorized() throws Exception {
-        String url = ENDPOINT + "/group/delete-user";
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID), UUID.fromString(USER_ID_1));
+    void testDeleteGroupEventsForUsers_unauthorized() throws Exception {
+        String url = ENDPOINT + "/group/delete-users";
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(GROUP_ID),
+                List.of(UUID.fromString(USER_ID_1)));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -396,9 +398,10 @@ class EventControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     @Transactional
-    void testDeleteChatEventsForUser_ok() throws Exception {
-        String url = ENDPOINT + "/chat/delete-user";
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
+    void testDeleteChatEventsForUsers_ok() throws Exception {
+        String url = ENDPOINT + "/chat/delete-users";
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID),
+                List.of(UUID.fromString(USER_ID_1)));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -417,9 +420,10 @@ class EventControllerIT {
 
     @Test
     @WithAnonymousUser
-    void testDeleteChatEventsForUser_unauthorized() throws Exception {
-        String url = ENDPOINT + "/chat/delete-user";
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID), UUID.fromString(USER_ID_1));
+    void testDeleteChatEventsForUsers_unauthorized() throws Exception {
+        String url = ENDPOINT + "/chat/delete-users";
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.fromString(CHAT_ID),
+                List.of(UUID.fromString(USER_ID_1)));
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)

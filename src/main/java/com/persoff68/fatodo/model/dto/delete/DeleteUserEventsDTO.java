@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,6 +18,7 @@ public class DeleteUserEventsDTO {
     private UUID id;
 
     @NotNull
-    private UUID userId;
+    @NotEmpty
+    private List<UUID> userIds;
 
 }

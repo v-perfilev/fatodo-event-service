@@ -3,11 +3,11 @@ package contracts.eventcontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'delete group and comment events for user'
+    name 'delete chat events for user'
     description 'should return status 200'
     request {
         method POST()
-        url("/api/events/group/delete-user")
+        url("/api/events/chat/delete-users")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
@@ -16,8 +16,8 @@ Contract.make {
             )
         }
         body([
-                "id"    : anyUuid(),
-                "userId": anyUuid(),
+                "id"     : anyUuid(),
+                "userIds": [anyUuid()],
         ])
     }
     response {

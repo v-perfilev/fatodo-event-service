@@ -64,8 +64,8 @@ public class EventConsumer {
     @KafkaListener(topics = EVENT_DELETE_TOPIC, containerFactory = "deleteContainerFactory")
     public void deleteEvent(@Payload String value, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key) {
         switch (key) {
-            case "group-delete-user" -> handleDeleteGroupEventsForUser(value);
-            case "chat-delete-user" -> handleDeleteChatEventsForUser(value);
+            case "group-delete-users" -> handleDeleteGroupEventsForUsers(value);
+            case "chat-delete-users" -> handleDeleteChatEventsForUsers(value);
             case "contact-delete" -> handleDeleteContactEvents(value);
             case "group-delete" -> handleDeleteGroupEvents(value);
             case "item-delete" -> handleDeleteItemEvents(value);
@@ -136,21 +136,19 @@ public class EventConsumer {
     }
 
 
-    private void handleDeleteGroupEventsForUser(String value) {
+    private void handleDeleteGroupEventsForUsers(String value) {
         try {
             DeleteUserEventsDTO dto = objectMapper.readValue(value, DeleteUserEventsDTO.class);
-            List<UUID> userIdList = List.of(dto.getUserId());
-            eventService.deleteGroupEventsForUser(dto.getId(), userIdList);
+            eventService.deleteGroupEventsForUser(dto.getId(), dto.getUserIds());
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }
     }
 
-    private void handleDeleteChatEventsForUser(String value) {
+    private void handleDeleteChatEventsForUsers(String value) {
         try {
             DeleteUserEventsDTO dto = objectMapper.readValue(value, DeleteUserEventsDTO.class);
-            List<UUID> userIdList = List.of(dto.getUserId());
-            eventService.deleteChatEventsForUser(dto.getId(), userIdList);
+            eventService.deleteChatEventsForUser(dto.getId(), dto.getUserIds());
         } catch (JsonProcessingException e) {
             throw new KafkaException();
         }

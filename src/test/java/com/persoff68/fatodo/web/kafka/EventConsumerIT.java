@@ -27,6 +27,7 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -121,9 +122,9 @@ class EventConsumerIT {
     }
 
     @Test
-    void testDeleteGroupEventsForUser() throws InterruptedException {
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), UUID.randomUUID());
-        kafkaTemplate.send("event_delete", "group-delete-user", dto);
+    void testDeleteGroupEventsForUsers() throws InterruptedException {
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), List.of(UUID.randomUUID()));
+        kafkaTemplate.send("event_delete", "group-delete-users", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();
@@ -131,9 +132,9 @@ class EventConsumerIT {
     }
 
     @Test
-    void testDeleteChatEventsForUser() throws InterruptedException {
-        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), UUID.randomUUID());
-        kafkaTemplate.send("event_delete", "chat-delete-user", dto);
+    void testDeleteChatEventsForUsers() throws InterruptedException {
+        DeleteUserEventsDTO dto = new DeleteUserEventsDTO(UUID.randomUUID(), List.of(UUID.randomUUID()));
+        kafkaTemplate.send("event_delete", "chat-delete-users", dto);
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();

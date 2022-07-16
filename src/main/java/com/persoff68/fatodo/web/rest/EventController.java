@@ -78,17 +78,15 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/group/delete-user")
-    public ResponseEntity<Void> deleteGroupAndCommentEventsForUser(@Valid @RequestBody DeleteUserEventsDTO dto) {
-        List<UUID> userIdList = List.of(dto.getUserId());
-        eventService.deleteGroupEventsForUser(dto.getId(), userIdList);
+    @PostMapping("/group/delete-users")
+    public ResponseEntity<Void> deleteGroupEventsForUser(@Valid @RequestBody DeleteUserEventsDTO dto) {
+        eventService.deleteGroupEventsForUser(dto.getId(), dto.getUserIds());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/chat/delete-user")
+    @PostMapping("/chat/delete-users")
     public ResponseEntity<Void> deleteChatEventsForUser(@Valid @RequestBody DeleteUserEventsDTO dto) {
-        List<UUID> userIdList = List.of(dto.getUserId());
-        eventService.deleteChatEventsForUser(dto.getId(), userIdList);
+        eventService.deleteChatEventsForUser(dto.getId(), dto.getUserIds());
         return ResponseEntity.ok().build();
     }
 

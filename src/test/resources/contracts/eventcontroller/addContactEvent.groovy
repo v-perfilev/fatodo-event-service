@@ -21,7 +21,7 @@ Contract.make {
                         producer("CONTACT_SEND")
                 ),
                 "recipientIds": $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
                 "firstUserId" : anyUuid(),

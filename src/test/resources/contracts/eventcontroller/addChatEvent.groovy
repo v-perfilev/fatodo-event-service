@@ -21,21 +21,21 @@ Contract.make {
                         producer("CHAT_CREATE")
                 ),
                 "recipientIds": $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
                 "userId"      : anyUuid(),
                 "chatId"      : anyUuid(),
                 "messageId"   : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer(anyUuid())
                 ),
                 "reaction"    : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer("test")
                 ),
                 "userIds"     : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
         ])

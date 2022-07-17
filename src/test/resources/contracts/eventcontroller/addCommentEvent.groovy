@@ -21,7 +21,7 @@ Contract.make {
                         producer("COMMENT_ADD")
                 ),
                 "recipientIds": $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
                 "userId"      : anyUuid(),
@@ -29,7 +29,7 @@ Contract.make {
                 "targetId"    : anyUuid(),
                 "commentId"   : anyUuid(),
                 "reaction"    : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer("test")
                 ),
         ])

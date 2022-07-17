@@ -17,7 +17,10 @@ Contract.make {
         }
         body([
                 "id"     : anyUuid(),
-                "userIds": [anyUuid()],
+                "userIds": $(
+                        consumer(regex(".*")),
+                        producer([anyUuid()])
+                ),
         ])
     }
     response {

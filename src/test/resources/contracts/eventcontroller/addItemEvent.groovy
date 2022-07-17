@@ -21,17 +21,21 @@ Contract.make {
                         producer("ITEM_CREATE")
                 ),
                 "recipientIds": $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
                 "userId"      : anyUuid(),
                 "groupId"     : anyUuid(),
                 "itemId"      : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer(anyUuid())
                 ),
+                "role"        : $(
+                        consumer(regex(".*")),
+                        producer("test")
+                ),
                 "userIds"     : $(
-                        consumer(any()),
+                        consumer(regex(".*")),
                         producer([anyUuid()])
                 ),
         ])

@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class WsService implements WsServiceClient {
+public class WsService {
 
     private final WsServiceClient wsServiceClient;
     private final EventMapper eventMapper;
@@ -26,11 +26,11 @@ public class WsService implements WsServiceClient {
         List<UUID> userIdList = event.getRecipients().stream().map(EventRecipient::getUserId).toList();
         EventDTO eventDTO = eventMapper.pojoToDTO(event);
         WsEventDTO<EventDTO> wsEventDTO = new WsEventDTO<>(userIdList, eventDTO);
-        sendEvent(wsEventDTO);
+        sendEventAsync(wsEventDTO);
     }
 
     @Async
-    public void sendEvent(WsEventDTO<EventDTO> event) {
+    public void sendEventAsync(WsEventDTO<EventDTO> event) {
         wsServiceClient.sendEvent(event);
     }
 }

@@ -2,6 +2,7 @@ package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.builder.TestEvent;
 import com.persoff68.fatodo.builder.TestEventRecipient;
+import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventRecipient;
 import com.persoff68.fatodo.model.constant.EventType;
@@ -12,6 +13,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -33,6 +35,9 @@ public abstract class ContractBase {
     EventRecipientRepository eventRecipientRepository;
     @Autowired
     ReadStatusRepository readStatusRepository;
+
+    @MockBean
+    WsServiceClient wsServiceClient;
 
     @BeforeEach
     public void setup() {

@@ -21,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EventService {
 
     private static final List<EventType> CONTACT_EVENT_TYPES =
@@ -39,7 +40,6 @@ public class EventService {
     private final EventRecipientRepository eventRecipientRepository;
     private final WsService wsService;
 
-    @Transactional
     public void addDefaultEvent(EventType type, List<UUID> recipientIdList) {
         if (!type.isDefaultEvent()) {
             throw new ModelInvalidException();
@@ -49,7 +49,6 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
     public void addContactEvent(EventType type, List<UUID> recipientIdList, ContactEvent contactEvent) {
         if (!type.isContactEvent()) {
             throw new ModelInvalidException();
@@ -65,7 +64,6 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
     public void addItemEvent(EventType type, List<UUID> recipientIdList, ItemEvent itemEvent, List<UUID> userIdList) {
         if (!type.isItemEvent()) {
             throw new ModelInvalidException();
@@ -77,10 +75,13 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
     public void addCommentEvent(EventType type, List<UUID> recipientIdList, CommentEvent commentEvent) {
         if (!type.isCommentEvent()) {
             throw new ModelInvalidException();
+        }
+        // delete previous if reaction
+        if (type.equals(EventType.COMMENT_REACTION)) {
+            deleteCommentReaction(commentEvent);
         }
         Event event = new Event(type, recipientIdList);
         commentEvent.setEvent(event);
@@ -89,10 +90,13 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
     public void addChatEvent(EventType type, List<UUID> recipientIdList, ChatEvent chatEvent, List<UUID> userIdList) {
         if (!type.isChatEvent()) {
             throw new ModelInvalidException();
+        }
+        // delete previous if reaction
+        if (type.equals(EventType.CHAT_REACTION)) {
+            deleteChatReaction(chatEvent);
         }
         Event event = new Event(type, recipientIdList);
         chatEvent = new ChatEvent(event, chatEvent, userIdList);
@@ -101,7 +105,7 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
+
     public void addReminderEvent(EventType type, List<UUID> recipientIdList, ReminderEvent reminderEvent) {
         if (!type.isReminderEvent()) {
             throw new ModelInvalidException();
@@ -113,7 +117,7 @@ public class EventService {
         wsService.sendEvent(event);
     }
 
-    @Transactional
+
     public void deleteGroupEventsForUser(UUID groupId, List<UUID> userIdList) {
         eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
@@ -123,34 +127,43 @@ public class EventService {
         eventRepository.deleteEmptyReminderEvents(REMINDER_EVENT_TYPES, groupId);
     }
 
-    @Transactional
     public void deleteChatEventsForUser(UUID chatId, List<UUID> userIdList) {
         eventRecipientRepository.deleteChatEventRecipients(CHAT_EVENT_TYPES, chatId, userIdList);
         eventRepository.deleteEmptyChatEvents(CHAT_EVENT_TYPES, chatId);
     }
 
-    @Transactional
     public void deleteContactsEvents(List<UUID> userIdList) {
         eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
     }
 
-    @Transactional
     public void deleteItemEvents(UUID itemId) {
         eventRepository.deleteItemEvents(ITEM_EVENT_TYPES, itemId);
         eventRepository.deleteCommentEventsByTargetId(COMMENT_EVENT_TYPES, itemId);
         eventRepository.deleteReminderEventsByItemId(REMINDER_EVENT_TYPES, itemId);
     }
 
-    @Transactional
     public void deleteGroupEvents(UUID groupId) {
         eventRepository.deleteGroupEvents(ITEM_EVENT_TYPES, groupId);
         eventRepository.deleteCommentEventsByParentId(COMMENT_EVENT_TYPES, groupId);
         eventRepository.deleteReminderEventsByGroupId(REMINDER_EVENT_TYPES, groupId);
     }
 
-    @Transactional
     public void deleteChatEvents(UUID chatId) {
         eventRepository.deleteChatEvents(CHAT_EVENT_TYPES, chatId);
+    }
+
+    public void deleteChatReaction(ChatEvent chatEvent) {
+        UUID userId = chatEvent.getUserId();
+        UUID chatId = chatEvent.getChatId();
+        UUID messageId = chatEvent.getMessageId();
+        eventRepository.deleteChatReaction(userId, chatId, messageId);
+    }
+
+    public void deleteCommentReaction(CommentEvent commentEvent) {
+        UUID userId = commentEvent.getUserId();
+        UUID targetId = commentEvent.getTargetId();
+        UUID commentId = commentEvent.getCommentId();
+        eventRepository.deleteChatReaction(userId, targetId, commentId);
     }
 
 }

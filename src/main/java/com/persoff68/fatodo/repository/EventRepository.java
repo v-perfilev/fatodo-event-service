@@ -147,4 +147,28 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             """)
     void deleteReminderEventsByItemId(@Param("eventTypes") List<EventType> eventTypes, @Param("itemId") UUID itemId);
 
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.type in com.persoff68.fatodo.model.constant.EventType.CHAT_REACTION
+            and e in (select ev from Event ev
+                join ChatEvent c on ev.id = c.event.id
+                where c.userId = :userId and c.chatId = :chatId and c.messageId = :messageId)
+            and e.recipients.size = 0
+            """)
+    void deleteChatReaction(@Param("userId") UUID userId, @Param("chatId") UUID chatId,
+                            @Param("messageId") UUID messageId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.type in com.persoff68.fatodo.model.constant.EventType.COMMENT_REACTION
+            and e in (select ev from Event ev
+                join CommentEvent c on ev.id = c.event.id
+                where c.userId = :userId and c.targetId = :targetId and c.commentId = :commentId)
+            and e.recipients.size = 0
+            """)
+    void deleteCommentReaction(@Param("userId") UUID userId, @Param("targetId") UUID targetId,
+                               @Param("commentId") UUID commentId);
+
 }

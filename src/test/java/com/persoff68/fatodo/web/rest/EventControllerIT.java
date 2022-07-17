@@ -18,6 +18,7 @@ import com.persoff68.fatodo.builder.TestEventRecipient;
 import com.persoff68.fatodo.builder.TestItemEvent;
 import com.persoff68.fatodo.builder.TestItemEventUser;
 import com.persoff68.fatodo.builder.TestReminderEvent;
+import com.persoff68.fatodo.client.WsServiceClient;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.CommentEvent;
@@ -45,6 +46,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -82,6 +84,9 @@ class EventControllerIT {
     ReadStatusRepository readStatusRepository;
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    WsServiceClient wsServiceClient;
 
     @BeforeEach
     void setup() {

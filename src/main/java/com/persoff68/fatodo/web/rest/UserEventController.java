@@ -24,7 +24,7 @@ import java.util.UUID;
 @RequestMapping(UserEventController.ENDPOINT)
 @RequiredArgsConstructor
 public class UserEventController {
-    static final String ENDPOINT = "/api/user-events";
+    static final String ENDPOINT = "/api/user-event";
 
     private static final int DEFAULT_SIZE = 30;
 
@@ -49,7 +49,7 @@ public class UserEventController {
         return ResponseEntity.ok(dtoPageableList);
     }
 
-    @GetMapping("/unread-count")
+    @GetMapping("/unread")
     public ResponseEntity<Long> getUnreadCount() {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         long unreadCount = userEventService.getUnreadCount(userId);

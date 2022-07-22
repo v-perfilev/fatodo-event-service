@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and Long'
     request {
         method GET()
-        url("/api/user-events/unread-count")
+        url("/api/user-event/unread")
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),

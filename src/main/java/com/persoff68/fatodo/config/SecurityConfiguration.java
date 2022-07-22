@@ -65,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(publicUrls).permitAll()
-                .antMatchers("/api/events/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
+                .antMatchers("/api/event/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
                 .anyRequest().authenticated();
     }
 

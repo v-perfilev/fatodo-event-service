@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200'
     request {
         method POST()
-        url("/api/events/item/delete")
+        url("/api/event/item/delete")
         headers {
             contentType applicationJson()
             header 'Authorization': $(

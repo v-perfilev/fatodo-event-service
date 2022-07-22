@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserEventControllerIT {
 
-    private static final String ENDPOINT = "/api/user-events";
+    private static final String ENDPOINT = "/api/user-event";
 
     private static final String USER_ID = "3c300277-b5ea-48d1-80db-ead620cf5846";
 
@@ -111,7 +111,7 @@ class UserEventControllerIT {
     @Test
     @WithCustomSecurityContext(id = USER_ID)
     void testUnreadCount_ok() throws Exception {
-        String url = ENDPOINT + "/unread-count";
+        String url = ENDPOINT + "/unread";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -122,7 +122,7 @@ class UserEventControllerIT {
     @Test
     @WithAnonymousUser
     void testUnreadCount_unauthorized() throws Exception {
-        String url = ENDPOINT + "/unread-count";
+        String url = ENDPOINT + "/unread";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }

@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200'
     request {
         method GET()
-        url("/api/user-events/refresh")
+        url("/api/user-event/refresh")
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),

@@ -11,6 +11,7 @@ import com.persoff68.fatodo.service.UserEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ public class UserEventController {
     private final EventMapper eventMapper;
 
     @GetMapping
+    @Transactional
     public ResponseEntity<PageableReadableList<EventDTO>> getEventsPageable(
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer size

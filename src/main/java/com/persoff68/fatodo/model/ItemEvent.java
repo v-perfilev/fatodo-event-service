@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -44,7 +43,7 @@ public class ItemEvent extends AbstractModel implements Serializable {
 
     private String role;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "itemEvent", fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "itemEvent")
     private List<ItemEventUser> users;
 
     public ItemEvent(Event event, ItemEvent itemEvent, List<UUID> userIdList) {
@@ -53,9 +52,9 @@ public class ItemEvent extends AbstractModel implements Serializable {
         this.groupId = itemEvent.groupId;
         this.itemId = itemEvent.itemId;
         this.role = itemEvent.role;
-        this.users = userIdList != null
-                ? userIdList.stream().distinct().map(id -> new ItemEventUser(this, id)).toList()
-                : Collections.emptyList();
+        this.users = userIdList != null ?
+                userIdList.stream().distinct().map(id -> new ItemEventUser(this, id)).toList() :
+                Collections.emptyList();
     }
 
 }

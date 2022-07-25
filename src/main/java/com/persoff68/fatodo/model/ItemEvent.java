@@ -53,7 +53,7 @@ public class ItemEvent extends AbstractModel implements Serializable {
         this.itemId = itemEvent.itemId;
         this.role = itemEvent.role;
         this.users = userIdList != null
-                ? userIdList.stream().distinct().map(userId -> new ItemEventUser(this, userId)).toList()
+                ? userIdList.stream().distinct().map(id -> new ItemEventUser(this, id)).toList()
                 : Collections.emptyList();
     }
 

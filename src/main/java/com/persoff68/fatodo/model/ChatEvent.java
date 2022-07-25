@@ -53,7 +53,7 @@ public class ChatEvent extends AbstractModel implements Serializable {
         this.messageId = chatEvent.messageId;
         this.reaction = chatEvent.reaction;
         this.users = userIdList != null
-                ? userIdList.stream().distinct().map(userId -> new ChatEventUser(this, userId)).toList()
+                ? userIdList.stream().distinct().map(id -> new ChatEventUser(this, id)).toList()
                 : Collections.emptyList();
     }
 

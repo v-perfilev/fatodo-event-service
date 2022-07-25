@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -43,7 +44,7 @@ public class ChatEvent extends AbstractModel implements Serializable {
 
     private String reaction;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "chatEvent", orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "chatEvent", fetch = FetchType.EAGER)
     private List<ChatEventUser> users;
 
     public ChatEvent(Event event, ChatEvent chatEvent, List<UUID> userIdList) {

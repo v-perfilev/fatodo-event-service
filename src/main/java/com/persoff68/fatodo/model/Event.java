@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,22 +32,22 @@ public class Event extends AbstractAuditingModel implements Serializable {
     @Enumerated(EnumType.STRING)
     private EventType type;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private List<EventRecipient> recipients;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private ContactEvent contactEvent;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private ItemEvent itemEvent;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private CommentEvent commentEvent;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private ChatEvent chatEvent;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event", fetch = FetchType.EAGER)
     private ReminderEvent reminderEvent;
 
     public Event(EventType type, List<UUID> recipientIdList) {

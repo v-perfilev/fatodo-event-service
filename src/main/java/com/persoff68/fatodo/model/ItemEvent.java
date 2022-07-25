@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,10 +52,9 @@ public class ItemEvent extends AbstractModel implements Serializable {
         this.groupId = itemEvent.groupId;
         this.itemId = itemEvent.itemId;
         this.role = itemEvent.role;
-        this.users = userIdList.stream()
-                .distinct()
-                .map(userId -> new ItemEventUser(this, userId))
-                .toList();
+        this.users = userIdList != null
+                ? userIdList.stream().distinct().map(userId -> new ItemEventUser(this, userId)).toList()
+                : Collections.emptyList();
     }
 
 }

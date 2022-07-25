@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,10 +52,9 @@ public class ChatEvent extends AbstractModel implements Serializable {
         this.chatId = chatEvent.chatId;
         this.messageId = chatEvent.messageId;
         this.reaction = chatEvent.reaction;
-        this.users = userIdList.stream()
-                .distinct()
-                .map(userId -> new ChatEventUser(this, userId))
-                .toList();
+        this.users = userIdList != null
+                ? userIdList.stream().distinct().map(userId -> new ChatEventUser(this, userId)).toList()
+                : Collections.emptyList();
     }
 
 }

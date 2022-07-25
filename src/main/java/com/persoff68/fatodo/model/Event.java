@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +51,9 @@ public class Event extends AbstractAuditingModel implements Serializable {
 
     public Event(EventType type, List<UUID> recipientIdList) {
         this.type = type;
-        this.recipients = recipientIdList.stream().distinct().map(userId -> new EventRecipient(this, userId)).toList();
+        this.recipients = recipientIdList != null
+                ? recipientIdList.stream().distinct().map(userId -> new EventRecipient(this, userId)).toList()
+                : Collections.emptyList();
     }
 
 }

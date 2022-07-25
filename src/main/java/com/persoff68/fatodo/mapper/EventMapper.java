@@ -19,6 +19,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,12 +42,16 @@ public interface EventMapper {
 
     @Named("itemUserIdsMapper")
     static List<UUID> itemUserIdsMapper(List<ItemEventUser> itemEventUserList) {
-        return itemEventUserList.stream().map(ItemEventUser::getUserId).toList();
+        return itemEventUserList != null
+                ? itemEventUserList.stream().map(ItemEventUser::getUserId).toList()
+                : Collections.emptyList();
     }
 
     @Named("chatUserIdsMapper")
     static List<UUID> chatUserIdsMapper(List<ChatEventUser> chatEventUserList) {
-        return chatEventUserList.stream().map(ChatEventUser::getUserId).toList();
+        return chatEventUserList != null
+                ? chatEventUserList.stream().map(ChatEventUser::getUserId).toList()
+                : Collections.emptyList();
     }
 
 }

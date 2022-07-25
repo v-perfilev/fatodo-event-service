@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,18 +22,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 public class EventService {
-
-    private static final List<EventType> CONTACT_EVENT_TYPES =
-            Arrays.stream(EventType.values()).filter(EventType::isContactEvent).toList();
-    private static final List<EventType> ITEM_EVENT_TYPES =
-            Arrays.stream(EventType.values()).filter(EventType::isItemEvent).toList();
-    private static final List<EventType> COMMENT_EVENT_TYPES =
-            Arrays.stream(EventType.values()).filter(EventType::isCommentEvent).toList();
-    private static final List<EventType> CHAT_EVENT_TYPES =
-            Arrays.stream(EventType.values()).filter(EventType::isChatEvent).toList();
-
-    private static final List<EventType> REMINDER_EVENT_TYPES =
-            Arrays.stream(EventType.values()).filter(EventType::isReminderEvent).toList();
 
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
@@ -55,7 +42,7 @@ public class EventService {
         }
         // delete previous events
         List<UUID> userIdList = List.of(contactEvent.getFirstUserId(), contactEvent.getSecondUserId());
-        eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
+        eventRepository.deleteContactEvents(userIdList);
         // and new event
         Event event = new Event(type, recipientIdList);
         contactEvent.setEvent(event);
@@ -119,37 +106,37 @@ public class EventService {
 
 
     public void deleteGroupEventsForUser(UUID groupId, List<UUID> userIdList) {
-        eventRecipientRepository.deleteGroupEventRecipients(ITEM_EVENT_TYPES, groupId, userIdList);
-        eventRepository.deleteEmptyItemGroupEvents(ITEM_EVENT_TYPES, groupId);
-        eventRecipientRepository.deleteCommentEventRecipients(COMMENT_EVENT_TYPES, groupId, userIdList);
-        eventRepository.deleteEmptyCommentEvents(COMMENT_EVENT_TYPES, groupId);
-        eventRecipientRepository.deleteReminderEventRecipients(REMINDER_EVENT_TYPES, groupId, userIdList);
-        eventRepository.deleteEmptyReminderEvents(REMINDER_EVENT_TYPES, groupId);
+        eventRecipientRepository.deleteGroupEventRecipients(groupId, userIdList);
+        eventRepository.deleteEmptyItemGroupEvents(groupId);
+        eventRecipientRepository.deleteCommentEventRecipients(groupId, userIdList);
+        eventRepository.deleteEmptyCommentEvents(groupId);
+        eventRecipientRepository.deleteReminderEventRecipients(groupId, userIdList);
+        eventRepository.deleteEmptyReminderEvents(groupId);
     }
 
     public void deleteChatEventsForUser(UUID chatId, List<UUID> userIdList) {
-        eventRecipientRepository.deleteChatEventRecipients(CHAT_EVENT_TYPES, chatId, userIdList);
-        eventRepository.deleteEmptyChatEvents(CHAT_EVENT_TYPES, chatId);
+        eventRecipientRepository.deleteChatEventRecipients(chatId, userIdList);
+        eventRepository.deleteEmptyChatEvents(chatId);
     }
 
     public void deleteContactsEvents(List<UUID> userIdList) {
-        eventRepository.deleteContactEvents(CONTACT_EVENT_TYPES, userIdList);
+        eventRepository.deleteContactEvents(userIdList);
     }
 
     public void deleteItemEvents(UUID itemId) {
-        eventRepository.deleteItemEvents(ITEM_EVENT_TYPES, itemId);
-        eventRepository.deleteCommentEventsByTargetId(COMMENT_EVENT_TYPES, itemId);
-        eventRepository.deleteReminderEventsByItemId(REMINDER_EVENT_TYPES, itemId);
+        eventRepository.deleteItemEvents(itemId);
+        eventRepository.deleteCommentEventsByTargetId(itemId);
+        eventRepository.deleteReminderEventsByItemId(itemId);
     }
 
     public void deleteGroupEvents(UUID groupId) {
-        eventRepository.deleteGroupEvents(ITEM_EVENT_TYPES, groupId);
-        eventRepository.deleteCommentEventsByParentId(COMMENT_EVENT_TYPES, groupId);
-        eventRepository.deleteReminderEventsByGroupId(REMINDER_EVENT_TYPES, groupId);
+        eventRepository.deleteGroupEvents(groupId);
+        eventRepository.deleteCommentEventsByParentId(groupId);
+        eventRepository.deleteReminderEventsByGroupId(groupId);
     }
 
     public void deleteChatEvents(UUID chatId) {
-        eventRepository.deleteChatEvents(CHAT_EVENT_TYPES, chatId);
+        eventRepository.deleteChatEvents(chatId);
     }
 
     public void deleteChatReaction(ChatEvent chatEvent) {
@@ -163,7 +150,7 @@ public class EventService {
         UUID userId = commentEvent.getUserId();
         UUID targetId = commentEvent.getTargetId();
         UUID commentId = commentEvent.getCommentId();
-        eventRepository.deleteChatReaction(userId, targetId, commentId);
+        eventRepository.deleteCommentReaction(userId, targetId, commentId);
     }
 
 }

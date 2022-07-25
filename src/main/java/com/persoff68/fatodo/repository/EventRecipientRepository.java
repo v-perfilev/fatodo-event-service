@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.repository;
 
 import com.persoff68.fatodo.model.EventRecipient;
-import com.persoff68.fatodo.model.constant.EventType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,52 +17,36 @@ public interface EventRecipientRepository extends JpaRepository<EventRecipient, 
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er
-                join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er
-                join ItemEvent ie on er.event.id = ie.event.id where ie.groupId = :groupId)
+            and exists (select 1 from ItemEvent i where r.event.id = i.event.id and i.groupId = :groupId)
             """)
-    void deleteGroupEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
-                                    @Param("groupId") UUID groupId,
+    void deleteGroupEventRecipients(@Param("groupId") UUID groupId,
                                     @Param("userIds") List<UUID> userIds);
 
     @Modifying
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er
-                join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er
-                join CommentEvent ce on er.event.id = ce.event.id where ce.parentId = :parentId)
+            and exists (select 1 from CommentEvent c where r.event.id = c.event.id and c.parentId = :parentId)
             """)
-    void deleteCommentEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
-                                      @Param("parentId") UUID parentId,
+    void deleteCommentEventRecipients(@Param("parentId") UUID parentId,
                                       @Param("userIds") List<UUID> userIds);
 
     @Modifying
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er
-                join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er
-                join ChatEvent ce on er.event.id = ce.event.id where ce.chatId = :chatId)
+            and exists (select 1 from ChatEvent c where r.event.id = c.event.id and c.chatId = :chatId)
             """)
-    void deleteChatEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
-                                   @Param("chatId") UUID chatId,
+    void deleteChatEventRecipients(@Param("chatId") UUID chatId,
                                    @Param("userIds") List<UUID> userIds);
 
     @Modifying
     @Query("""
             delete from EventRecipient r
             where r.userId in :userIds
-            and r in (select er from EventRecipient er
-                join Event e on er.event.id = e.id where e.type in :eventTypes)
-            and r in (select er from EventRecipient er
-                join ReminderEvent re on er.event.id = re.event.id where re.groupId = :groupId)
+            and exists (select 1 from ReminderEvent re where r.event.id = re.event.id and re.groupId = :groupId)
             """)
-    void deleteReminderEventRecipients(@Param("eventTypes") List<EventType> eventTypes,
-                                       @Param("groupId") UUID groupId,
+    void deleteReminderEventRecipients(@Param("groupId") UUID groupId,
                                        @Param("userIds") List<UUID> userIds);
 
 }

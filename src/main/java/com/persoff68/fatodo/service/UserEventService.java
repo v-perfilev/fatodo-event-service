@@ -23,7 +23,7 @@ public class UserEventService {
 
     @Transactional
     public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
-        Date lastReadAt = updateLastRead(userId);
+        Date lastReadAt = getLastReadDate(userId);
         Page<Event> eventPage = eventRepository.findAllByUserId(userId, pageable);
         long unreadCount = eventRepository.countFromByUserId(userId, lastReadAt);
         return PageableReadableList.of(eventPage.getContent(), eventPage.getTotalElements(), unreadCount);
@@ -37,13 +37,17 @@ public class UserEventService {
     }
 
     @Transactional
-    public Date updateLastRead(UUID userId) {
+    public void updateLastRead(UUID userId) {
         ReadStatus readStatus = readStatusRepository.findByUserId(userId)
                 .orElse(new ReadStatus(userId, new Date()));
-        Date from = readStatus.getLastReadAt();
         readStatus.setLastReadAt(new Date());
         readStatusRepository.save(readStatus);
-        return from;
+    }
+
+    public Date getLastReadDate(UUID userId) {
+        ReadStatus readStatus = readStatusRepository.findByUserId(userId)
+                .orElse(new ReadStatus(userId, new Date()));
+        return readStatus.getLastReadAt();
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,7 @@ public class UserEventController {
                 .map(eventMapper::pojoToDTO)
                 .toList();
         PageableReadableList<EventDTO> dtoPageableList = PageableReadableList.of(dtoList,
-                eventPageableList.getCount(), eventPageableList.getCount());
+                eventPageableList.getCount(), eventPageableList.getUnread());
         return ResponseEntity.ok(dtoPageableList);
     }
 
@@ -58,7 +59,7 @@ public class UserEventController {
         return ResponseEntity.ok(unreadCount);
     }
 
-    @GetMapping("/refresh")
+    @PutMapping("/refresh")
     public ResponseEntity<Void> refresh() {
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         userEventService.updateLastRead(userId);

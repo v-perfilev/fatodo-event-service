@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoEventServiceApplication.class)
@@ -83,7 +84,7 @@ class UserEventControllerIT {
         PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(2);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isEqualTo(2);
+        assertThat(dtoList.getUnread()).isEqualTo(0);
     }
 
     @Test
@@ -98,7 +99,7 @@ class UserEventControllerIT {
         PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(1);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isEqualTo(2);
+        assertThat(dtoList.getUnread()).isEqualTo(0);
     }
 
     @Test
@@ -110,13 +111,28 @@ class UserEventControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = USER_ID)
-    void testUnreadCount_ok() throws Exception {
+    void testUnreadCount_ok_unread() throws Exception {
         String url = ENDPOINT + "/unread";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         long unreadCount = objectMapper.readValue(resultString, Long.class);
         assertThat(unreadCount).isEqualTo(2);
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = USER_ID)
+    void testUnreadCount_ok_read() throws Exception {
+        String refreshUrl = ENDPOINT + "/refresh";
+        mvc.perform(put(refreshUrl))
+                .andExpect(status().isOk());
+
+        String url = ENDPOINT + "/unread";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        long unreadCount = objectMapper.readValue(resultString, Long.class);
+        assertThat(unreadCount).isEqualTo(0);
     }
 
     @Test
@@ -131,7 +147,7 @@ class UserEventControllerIT {
     @WithCustomSecurityContext(id = USER_ID)
     void testRefresh_ok() throws Exception {
         String url = ENDPOINT + "/refresh";
-        mvc.perform(get(url))
+        mvc.perform(put(url))
                 .andExpect(status().isOk());
 
         ReadStatus readStatus = readStatusRepository.findByUserId(UUID.fromString(USER_ID)).orElse(null);
@@ -151,7 +167,7 @@ class UserEventControllerIT {
     @WithAnonymousUser
     void testRefresh_unauthorized() throws Exception {
         String url = ENDPOINT + "/refresh";
-        mvc.perform(get(url))
+        mvc.perform(put(url))
                 .andExpect(status().isUnauthorized());
     }
 

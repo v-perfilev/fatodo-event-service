@@ -6,7 +6,7 @@ Contract.make {
     name 'refresh unread count for user'
     description 'should return status 200'
     request {
-        method GET()
+        method PUT()
         url("/api/user-event/refresh")
         headers {
             header 'Authorization': $(

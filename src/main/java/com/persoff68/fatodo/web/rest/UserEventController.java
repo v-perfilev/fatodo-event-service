@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,13 +42,9 @@ public class UserEventController {
         offset = Optional.ofNullable(offset).orElse(0);
         size = Optional.ofNullable(size).orElse(DEFAULT_SIZE);
         Pageable pageRequest = OffsetPageRequest.of(offset, size);
-        PageableReadableList<Event> eventPageableList = userEventService.getAllPageable(userId, pageRequest);
-        List<EventDTO> dtoList = eventPageableList.getData().stream()
-                .map(eventMapper::pojoToDTO)
-                .toList();
-        PageableReadableList<EventDTO> dtoPageableList = PageableReadableList.of(dtoList,
-                eventPageableList.getCount(), eventPageableList.getUnread());
-        return ResponseEntity.ok(dtoPageableList);
+        PageableReadableList<Event> eventList = userEventService.getAllPageable(userId, pageRequest);
+        PageableReadableList<EventDTO> dtoList = eventList.convert(eventMapper::pojoToDTO);
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping("/unread")

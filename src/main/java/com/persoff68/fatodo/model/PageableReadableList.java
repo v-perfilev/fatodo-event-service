@@ -2,8 +2,8 @@ package com.persoff68.fatodo.model;
 
 import lombok.Data;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 @Data
 public class PageableReadableList<T> {
@@ -14,6 +14,13 @@ public class PageableReadableList<T> {
 
     private long unread;
 
+    public <Z> PageableReadableList<Z> convert(Function<T, Z> converterFunc) {
+        List<Z> convertedList = this.data.stream()
+                .map(converterFunc)
+                .toList();
+        return PageableReadableList.of(convertedList, count, unread);
+    }
+
     public static <T> PageableReadableList<T> of(List<T> data, long count, long unread) {
         PageableReadableList<T> pageableReadableList = new PageableReadableList<>();
         pageableReadableList.setData(data);
@@ -22,11 +29,4 @@ public class PageableReadableList<T> {
         return pageableReadableList;
     }
 
-    public static <T> PageableReadableList<T> empty() {
-        PageableReadableList<T> pageableReadableList = new PageableReadableList<>();
-        pageableReadableList.setData(Collections.emptyList());
-        pageableReadableList.setCount(0L);
-        pageableReadableList.setUnread(0L);
-        return pageableReadableList;
-    }
 }

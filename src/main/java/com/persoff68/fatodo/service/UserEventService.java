@@ -39,7 +39,7 @@ public class UserEventService {
     @Transactional
     public Date updateLastRead(UUID userId) {
         ReadStatus readStatus = readStatusRepository.findByUserId(userId)
-                .orElse(new ReadStatus(userId, new Date(0)));
+                .orElse(new ReadStatus(userId, new Date()));
         Date from = readStatus.getLastReadAt();
         readStatus.setLastReadAt(new Date());
         readStatusRepository.save(readStatus);

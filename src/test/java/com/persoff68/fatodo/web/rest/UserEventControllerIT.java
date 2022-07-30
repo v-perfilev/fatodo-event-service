@@ -84,7 +84,7 @@ class UserEventControllerIT {
         PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(2);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isEqualTo(0);
+        assertThat(dtoList.getUnread()).isZero();
     }
 
     @Test
@@ -99,7 +99,7 @@ class UserEventControllerIT {
         PageableReadableList<EventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(1);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isEqualTo(0);
+        assertThat(dtoList.getUnread()).isZero();
     }
 
     @Test
@@ -132,7 +132,7 @@ class UserEventControllerIT {
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         long unreadCount = objectMapper.readValue(resultString, Long.class);
-        assertThat(unreadCount).isEqualTo(0);
+        assertThat(unreadCount).isZero();
     }
 
     @Test

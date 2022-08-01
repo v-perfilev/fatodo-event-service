@@ -79,7 +79,7 @@ class WsProducerIT {
         List<UUID> recipientIdList = List.of(UUID.randomUUID());
         eventService.addDefaultEvent(EventType.WELCOME, recipientIdList);
 
-        ConsumerRecord<String, WsEventDTO<EventDTO>> record = wsRecords.poll(10, TimeUnit.SECONDS);
+        ConsumerRecord<String, WsEventDTO<EventDTO>> record = wsRecords.poll(5, TimeUnit.SECONDS);
 
         assertThat(wsServiceClient).isInstanceOf(WsProducer.class);
         assertThat(record).isNotNull();

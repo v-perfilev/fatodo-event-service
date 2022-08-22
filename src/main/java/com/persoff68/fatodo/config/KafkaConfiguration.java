@@ -2,8 +2,6 @@ package com.persoff68.fatodo.config;
 
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
 import com.persoff68.fatodo.config.util.KafkaUtils;
-import com.persoff68.fatodo.model.dto.EventDTO;
-import com.persoff68.fatodo.model.dto.WsEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
-import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
 @EnableKafka
@@ -48,11 +45,6 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic eventNewTopic() {
-        return KafkaUtils.buildTopic("ws_event", partitions);
-    }
-
-    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> addContainerFactory() {
         return KafkaUtils.buildStringContainerFactory(bootstrapAddress, groupId, autoOffsetResetConfig);
     }
@@ -60,11 +52,6 @@ public class KafkaConfiguration {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> deleteContainerFactory() {
         return KafkaUtils.buildStringContainerFactory(bootstrapAddress, groupId, autoOffsetResetConfig);
-    }
-
-    @Bean
-    public KafkaTemplate<String, WsEventDTO<EventDTO>> wsEventKafkaTemplate() {
-        return KafkaUtils.buildJsonKafkaTemplate(bootstrapAddress);
     }
 
 }

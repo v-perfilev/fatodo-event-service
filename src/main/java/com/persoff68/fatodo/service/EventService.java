@@ -9,7 +9,6 @@ import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
-import com.persoff68.fatodo.service.client.WsService;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
-    private final WsService wsService;
 
     public void addDefaultEvent(EventType type, List<UUID> recipientIdList) {
         if (!type.isDefaultEvent()) {
@@ -33,7 +31,6 @@ public class EventService {
         }
         Event event = new Event(type, recipientIdList);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
     public void addContactEvent(EventType type, List<UUID> recipientIdList, ContactEvent contactEvent) {
@@ -48,7 +45,6 @@ public class EventService {
         contactEvent.setEvent(event);
         event.setContactEvent(contactEvent);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
     public void addItemEvent(EventType type, List<UUID> recipientIdList, ItemEvent itemEvent, List<UUID> userIdList) {
@@ -59,7 +55,6 @@ public class EventService {
         itemEvent = new ItemEvent(event, itemEvent, userIdList);
         event.setItemEvent(itemEvent);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
     public void addCommentEvent(EventType type, List<UUID> recipientIdList, CommentEvent commentEvent) {
@@ -74,7 +69,6 @@ public class EventService {
         commentEvent.setEvent(event);
         event.setCommentEvent(commentEvent);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
     public void addChatEvent(EventType type, List<UUID> recipientIdList, ChatEvent chatEvent, List<UUID> userIdList) {
@@ -89,7 +83,6 @@ public class EventService {
         chatEvent = new ChatEvent(event, chatEvent, userIdList);
         event.setChatEvent(chatEvent);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
 
@@ -101,7 +94,6 @@ public class EventService {
         reminderEvent = new ReminderEvent(event, reminderEvent);
         event.setReminderEvent(reminderEvent);
         event = eventRepository.save(event);
-        wsService.sendEvent(event);
     }
 
 

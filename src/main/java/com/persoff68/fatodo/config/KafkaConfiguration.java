@@ -1,7 +1,11 @@
 package com.persoff68.fatodo.config;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.config.annotation.ConditionalOnPropertyNotNull;
+import com.persoff68.fatodo.config.constant.KafkaTopics;
 import com.persoff68.fatodo.config.util.KafkaUtils;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,29 +33,23 @@ public class KafkaConfiguration {
     @Value(value = "${kafka.autoOffsetResetConfig:latest}")
     private String autoOffsetResetConfig;
 
+
+    private final ObjectMapper objectMapper;
+
     @Bean
     public KafkaAdmin kafkaAdmin() {
         return KafkaUtils.buildKafkaAdmin(bootstrapAddress);
     }
 
     @Bean
-    public NewTopic addNewTopic() {
-        return KafkaUtils.buildTopic("event_add", partitions);
+    public NewTopic eventNewTopic() {
+        return KafkaUtils.buildTopic(KafkaTopics.EVENT.getValue(), partitions);
     }
 
     @Bean
-    public NewTopic deleteNewTopic() {
-        return KafkaUtils.buildTopic("event_delete", partitions);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> addContainerFactory() {
-        return KafkaUtils.buildStringContainerFactory(bootstrapAddress, groupId, autoOffsetResetConfig);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> deleteContainerFactory() {
-        return KafkaUtils.buildStringContainerFactory(bootstrapAddress, groupId, autoOffsetResetConfig);
+    public ConcurrentKafkaListenerContainerFactory<String, EventDTO> eventContainerFactory() {
+        JavaType javaType = objectMapper.getTypeFactory().constructType(EventDTO.class);
+        return KafkaUtils.buildJsonContainerFactory(bootstrapAddress, groupId, autoOffsetResetConfig, javaType);
     }
 
 }

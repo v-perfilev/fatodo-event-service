@@ -32,7 +32,7 @@ public class Event extends AbstractAuditingModel implements Serializable {
     private EventType type;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    private List<EventRecipient> recipients;
+    private List<EventUser> users;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     private ContactEvent contactEvent;
@@ -49,10 +49,10 @@ public class Event extends AbstractAuditingModel implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     private ReminderEvent reminderEvent;
 
-    public Event(EventType type, List<UUID> recipientIdList) {
+    public Event(EventType type, List<UUID> userIdList) {
         this.type = type;
-        this.recipients = recipientIdList != null
-                ? recipientIdList.stream().distinct().map(userId -> new EventRecipient(this, userId)).toList()
+        this.users = userIdList != null
+                ? userIdList.stream().distinct().map(userId -> new EventUser(this, userId)).toList()
                 : Collections.emptyList();
     }
 

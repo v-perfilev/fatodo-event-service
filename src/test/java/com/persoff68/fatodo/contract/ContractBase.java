@@ -1,10 +1,9 @@
 package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.builder.TestEvent;
-import com.persoff68.fatodo.builder.TestEventRecipient;
-import com.persoff68.fatodo.client.WsServiceClient;
+import com.persoff68.fatodo.builder.TestEventUser;
 import com.persoff68.fatodo.model.Event;
-import com.persoff68.fatodo.model.EventRecipient;
+import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -37,9 +35,6 @@ class ContractBase {
     @Autowired
     ReadStatusRepository readStatusRepository;
 
-    @MockBean
-    WsServiceClient wsServiceClient;
-
     @BeforeEach
     void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
@@ -56,12 +51,12 @@ class ContractBase {
     }
 
     private Event buildEvent(String userId) {
-        EventRecipient eventRecipient = TestEventRecipient.defaultBuilder()
+        EventUser eventUser = TestEventUser.defaultBuilder()
                 .userId(UUID.fromString(userId)).build().toParent();
         Event event = TestEvent.defaultBuilder()
-                .type(EventType.WELCOME).eventRecipients(List.of(eventRecipient))
+                .type(EventType.WELCOME).eventUsers(List.of(eventUser))
                 .build().toParent();
-        eventRecipient.setEvent(event);
+        eventUser.setEvent(event);
         return event;
     }
 

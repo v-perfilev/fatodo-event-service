@@ -16,13 +16,13 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ftd_event_recipient")
+@Table(name = "ftd_event_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(EventRecipient.EventRecipientId.class)
+@IdClass(EventUser.EventUserId.class)
 @ToString(exclude = {"event"})
-public class EventRecipient implements Serializable {
+public class EventUser implements Serializable {
     @Serial
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
@@ -36,7 +36,7 @@ public class EventRecipient implements Serializable {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventRecipientId implements Serializable {
+    public static class EventUserId implements Serializable {
         @Serial
         private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 

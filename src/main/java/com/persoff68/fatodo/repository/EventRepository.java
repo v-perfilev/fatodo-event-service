@@ -18,16 +18,16 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("""
             select e from Event e
-            join EventRecipient r on e.id = r.event.id
-            where r.userId = :userId
+            join EventUser u on e.id = u.event.id
+            where u.userId = :userId
             order by e.createdAt desc
             """)
     Page<Event> findAllByUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("""
             select count(e) from Event e
-            join EventRecipient r on e.id = r.event.id
-            where r.userId = :userId and e.createdAt > :from
+            join EventUser u on e.id = u.event.id
+            where u.userId = :userId and e.createdAt > :from
             """)
     long countFromByUserId(@Param("userId") UUID userId, @Param("from") Date from);
 
@@ -43,7 +43,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             delete from Event e
             where exists (select 1 from ItemEvent i where e.id = i.event.id and i.groupId = :groupId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteEmptyItemGroupEvents(@Param("groupId") UUID groupId);
 
@@ -51,7 +51,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             delete from Event e
             where exists (select 1 from CommentEvent c where e.id = c.event.id and c.parentId = :parentId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteEmptyCommentEvents(@Param("parentId") UUID parentId);
 
@@ -59,7 +59,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             delete from Event e
             where exists (select 1 from ChatEvent c where e.id = c.event.id and c.chatId = :chatId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteEmptyChatEvents(@Param("chatId") UUID chatId);
 
@@ -67,7 +67,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("""
             delete from Event e
             where exists (select 1 from ReminderEvent r where e.id = r.event.id and r.groupId = :groupId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteEmptyReminderEvents(@Param("groupId") UUID groupId);
 
@@ -123,10 +123,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Modifying
     @Query("""
             delete from Event e
-            where e.type in com.persoff68.fatodo.model.constant.EventType.CHAT_REACTION
+            where e.type in com.persoff68.fatodo.model.constant.EventType.CHAT_REACTION_INCOMING
             and exists (select 1 from ChatEvent c where e.id = c.event.id
                 and c.userId = :userId and c.chatId = :chatId and c.messageId = :messageId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteChatReaction(@Param("userId") UUID userId, @Param("chatId") UUID chatId,
                             @Param("messageId") UUID messageId);
@@ -134,10 +134,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Modifying
     @Query("""
             delete from Event e
-            where e.type in com.persoff68.fatodo.model.constant.EventType.COMMENT_REACTION
+            where e.type in com.persoff68.fatodo.model.constant.EventType.COMMENT_REACTION_INCOMING
             and exists (select 1 from CommentEvent c where e.id = c.event.id
                 and c.userId = :userId and c.targetId = :targetId and c.commentId = :commentId)
-            and e.recipients.size = 0
+            and e.users.size = 0
             """)
     void deleteCommentReaction(@Param("userId") UUID userId, @Param("targetId") UUID targetId,
                                @Param("commentId") UUID commentId);

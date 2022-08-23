@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoEventServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestEvent;
-import com.persoff68.fatodo.builder.TestEventRecipient;
+import com.persoff68.fatodo.builder.TestEventUser;
 import com.persoff68.fatodo.model.Event;
-import com.persoff68.fatodo.model.EventRecipient;
+import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.PageableReadableList;
 import com.persoff68.fatodo.model.ReadStatus;
 import com.persoff68.fatodo.model.constant.EventType;
@@ -15,7 +15,6 @@ import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
-import com.persoff68.fatodo.service.EventService;
 import com.persoff68.fatodo.service.UserEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,8 +47,6 @@ class UserEventControllerIT {
     @Autowired
     MockMvc mvc;
 
-    @Autowired
-    EventService eventService;
     @Autowired
     UserEventService userEventService;
     @Autowired
@@ -172,12 +169,13 @@ class UserEventControllerIT {
     }
 
     private Event buildEvent(String userId) {
-        EventRecipient eventRecipient = TestEventRecipient.defaultBuilder()
+        EventUser eventUser = TestEventUser.defaultBuilder()
                 .userId(UUID.fromString(userId)).build().toParent();
         Event event = TestEvent.defaultBuilder()
-                .type(EventType.WELCOME).eventRecipients(List.of(eventRecipient))
+                .type(EventType.WELCOME)
+                .eventUsers(List.of(eventUser))
                 .build().toParent();
-        eventRecipient.setEvent(event);
+        eventUser.setEvent(event);
         return event;
     }
 

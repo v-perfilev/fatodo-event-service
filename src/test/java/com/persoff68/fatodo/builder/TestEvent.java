@@ -4,7 +4,7 @@ import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.CommentEvent;
 import com.persoff68.fatodo.model.ContactEvent;
 import com.persoff68.fatodo.model.Event;
-import com.persoff68.fatodo.model.EventRecipient;
+import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
@@ -18,7 +18,7 @@ public class TestEvent extends Event {
     @Builder
     public TestEvent(UUID id,
                      EventType type,
-                     List<EventRecipient> eventRecipients,
+                     List<EventUser> eventUsers,
                      ContactEvent contactEvent,
                      ItemEvent itemEvent,
                      CommentEvent commentEvent,
@@ -27,7 +27,7 @@ public class TestEvent extends Event {
         super();
         super.setId(id);
         super.setType(type);
-        super.setRecipients(eventRecipients);
+        super.setUsers(eventUsers);
         super.setContactEvent(contactEvent);
         super.setItemEvent(itemEvent);
         super.setCommentEvent(commentEvent);
@@ -44,7 +44,7 @@ public class TestEvent extends Event {
         Event event = new Event();
         event.setId(getId());
         event.setType(getType());
-        event.setRecipients(getRecipients());
+        event.setUsers(getUsers());
         event.setContactEvent(getContactEvent());
         event.setItemEvent(getItemEvent());
         event.setCommentEvent(getCommentEvent());

@@ -21,9 +21,9 @@
             <column name="last_modified_at" type="datetime"/>
         </createTable>
 
-        <createTable tableName="ftd_event_recipient">
+        <createTable tableName="ftd_event_user">
             <column name="event_id" type="binary(16)">
-                <constraints primaryKey="true" foreignKeyName="fk_event_recipient_event" references="ftd_event(id)"
+                <constraints primaryKey="true" foreignKeyName="fk_event_user_event" references="ftd_event(id)"
                              deleteCascade="true" nullable="false"/>
             </column>
 
@@ -32,7 +32,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="index_event_recipient_user" tableName="ftd_event_recipient">
+        <createIndex indexName="index_event_user_user" tableName="ftd_event_user">
             <column name="user_id"/>
         </createIndex>
 

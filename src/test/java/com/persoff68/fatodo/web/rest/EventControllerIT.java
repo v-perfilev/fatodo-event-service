@@ -2,15 +2,18 @@ package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoEventServiceApplication;
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestChatEvent;
 import com.persoff68.fatodo.builder.TestChatEventUser;
 import com.persoff68.fatodo.builder.TestCommentEvent;
 import com.persoff68.fatodo.builder.TestContactEvent;
 import com.persoff68.fatodo.builder.TestEvent;
+import com.persoff68.fatodo.builder.TestEventDTO;
 import com.persoff68.fatodo.builder.TestEventUser;
 import com.persoff68.fatodo.builder.TestItemEvent;
 import com.persoff68.fatodo.builder.TestItemEventUser;
 import com.persoff68.fatodo.builder.TestReminderEvent;
+import com.persoff68.fatodo.builder.event.TestItemGroup;
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.CommentEvent;
@@ -21,17 +24,25 @@ import com.persoff68.fatodo.model.ItemEvent;
 import com.persoff68.fatodo.model.ItemEventUser;
 import com.persoff68.fatodo.model.ReminderEvent;
 import com.persoff68.fatodo.model.constant.EventType;
+import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.event.ItemGroup;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.repository.ReadStatusRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.UUID;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoEventServiceApplication.class)
 @AutoConfigureMockMvc
@@ -59,10 +70,6 @@ class EventControllerIT {
 
     @BeforeEach
     void setup() {
-        eventRepository.deleteAll();
-        eventRecipientRepository.deleteAll();
-        readStatusRepository.deleteAll();
-
         Event contactEvent = buildContactEvent(USER_ID_1, USER_ID_2);
         Event itemEvent = buildItemEvent(GROUP_ID, ITEM_ID, USER_ID_1);
         Event commentEvent = buildCommentEvent(GROUP_ID, USER_ID_1);
@@ -75,8 +82,44 @@ class EventControllerIT {
         eventRepository.save(reminderEvent);
     }
 
+    @AfterEach
+    void cleanup() {
+        eventRepository.deleteAll();
+        eventRecipientRepository.deleteAll();
+        readStatusRepository.deleteAll();
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    void testAddDefaultWelcomeEvent() throws Exception {
+        EventDTO eventDTO = TestEventDTO.defaultBuilder().type(EventType.WELCOME).build().toParent();
+        String body = objectMapper.writeValueAsString(eventDTO);
+        mvc.perform(post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    void testAddItemGroupEvent() throws Exception {
+        ItemGroup itemGroup = TestItemGroup.defaultBuilder().build().toParent();
+        String payload = objectMapper.writeValueAsString(itemGroup);
+        EventDTO eventDTO = TestEventDTO.defaultBuilder()
+                .type(EventType.ITEM_GROUP_CREATE).payload(payload).build().toParent();
+        String body = objectMapper.writeValueAsString(eventDTO);
+        mvc.perform(post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated());
+    }
+
+
     private Event buildContactEvent(String firstUserId, String secondUserId) {
         ContactEvent contactEvent = TestContactEvent.defaultBuilder()
+                .userId(UUID.fromString(firstUserId))
                 .firstUserId(UUID.fromString(firstUserId))
                 .secondUserId(UUID.fromString(secondUserId))
                 .build().toParent();

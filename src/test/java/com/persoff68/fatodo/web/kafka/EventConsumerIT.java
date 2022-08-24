@@ -53,7 +53,7 @@ class EventConsumerIT {
         boolean messageConsumed = mailConsumer.getLatch().await(5, TimeUnit.SECONDS);
 
         assertThat(messageConsumed).isTrue();
-        verify(eventDefaultService, times(1)).addEvent(any(), any(), any());
+        verify(eventDefaultService, times(1)).addEvent(any());
     }
 
     private <T> KafkaTemplate<String, T> buildKafkaTemplate() {

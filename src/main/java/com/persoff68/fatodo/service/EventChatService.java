@@ -1,9 +1,13 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.model.constant.EventType;
+import com.persoff68.fatodo.model.ChatEvent;
+import com.persoff68.fatodo.model.Event;
+import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.event.Chat;
+import com.persoff68.fatodo.model.event.ChatMember;
+import com.persoff68.fatodo.model.event.ChatReaction;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
-import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,47 +20,77 @@ import java.util.UUID;
 @Transactional
 public class EventChatService implements EventService {
 
+    private final JsonService jsonService;
     private final EventRepository eventRepository;
     private final EventRecipientRepository eventRecipientRepository;
 
-    public void addEvent(List<UUID> userIdList, EventType type, Object payload) {
-        switch (type) {
-            case CHAT_CREATE -> addChatCreate(userIdList, type, payload);
-            case CHAT_UPDATE -> addChatUpdate(userIdList, type, payload);
-            case CHAT_DELETE -> addChatDelete(userIdList, type, payload);
-            case CHAT_MEMBER_ADD -> addChatMemberAdd(userIdList, type, payload);
-            case CHAT_MEMBER_DELETE -> addChatMemberDelete(userIdList, type, payload);
-            case CHAT_MEMBER_LEAVE -> addChatMemberLeave(userIdList, type, payload);
-            case CHAT_REACTION_INCOMING -> addChatReactionIncoming(userIdList, type, payload);
+    public void addEvent(EventDTO eventDTO) {
+        switch (eventDTO.getType()) {
+            case CHAT_CREATE, CHAT_UPDATE -> addChatEvent(eventDTO);
+            case CHAT_MEMBER_ADD -> addChatMemberAdd(eventDTO);
+            case CHAT_MEMBER_DELETE -> addChatMemberDelete(eventDTO);
+            case CHAT_MEMBER_LEAVE -> addChatMemberLeave(eventDTO);
+            case CHAT_REACTION_INCOMING -> addChatReactionIncoming(eventDTO);
         }
     }
 
-    public void addChatCreate(List<UUID> userIdList, EventType type, Object payload) {
-
+    public void addChatEvent(EventDTO eventDTO) {
+        Chat chat = jsonService.deserialize(eventDTO.getPayload(), Chat.class);
+        Event event = new Event(eventDTO);
+        ChatEvent chatEvent = ChatEvent.of(chat, eventDTO.getUserId(), event);
+        event.setChatEvent(chatEvent);
+        eventRepository.save(event);
     }
 
-    public void addChatUpdate(List<UUID> userIdList, EventType type, Object payload) {
-
+    public void addChatMemberAdd(EventDTO eventDTO) {
+        List<ChatMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ChatMember.class);
+        if (!memberList.isEmpty()) {
+            addMembersEvents(memberList, eventDTO);
+        }
     }
 
-    public void addChatDelete(List<UUID> userIdList, EventType type, Object payload) {
-
+    public void addChatMemberDelete(EventDTO eventDTO) {
+        List<ChatMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ChatMember.class);
+        if (!memberList.isEmpty()) {
+            addMembersEvents(memberList, eventDTO);
+            deleteMembersEvents(memberList);
+        }
     }
 
-    public void addChatMemberAdd(List<UUID> userIdList, EventType type, Object payload) {
-
+    public void addChatMemberLeave(EventDTO eventDTO) {
+        ChatMember member = jsonService.deserialize(eventDTO.getPayload(), ChatMember.class);
+        List<ChatMember> memberList = List.of(member);
+        addMembersEvents(memberList, eventDTO);
+        deleteMembersEvents(memberList);
     }
 
-    public void addChatMemberDelete(List<UUID> userIdList, EventType type, Object payload) {
-
+    public void addChatReactionIncoming(EventDTO eventDTO) {
+        ChatReaction reaction = jsonService.deserialize(eventDTO.getPayload(), ChatReaction.class);
+        if (reaction.getType().equals(ChatReaction.ReactionType.NONE)) {
+            UUID userId = reaction.getUserId();
+            UUID chatId = reaction.getChatId();
+            UUID messageId = reaction.getMessageId();
+            eventRepository.deleteChatReaction(userId, chatId, messageId);
+        } else {
+            Event event = new Event(eventDTO);
+            ChatEvent chatEvent = ChatEvent.of(reaction, eventDTO.getUserId(), event);
+            event.setChatEvent(chatEvent);
+            eventRepository.save(event);
+        }
     }
 
-    public void addChatMemberLeave(List<UUID> userIdList, EventType type, Object payload) {
-
+    private void addMembersEvents(List<ChatMember> memberList, EventDTO eventDTO) {
+        Event event = new Event(eventDTO);
+        ChatEvent chatEvent = ChatEvent.of(memberList, eventDTO.getUserId(), event);
+        event.setChatEvent(chatEvent);
+        eventRepository.save(event);
     }
 
-    public void addChatReactionIncoming(List<UUID> userIdList, EventType type, Object payload) {
-
+    private void deleteMembersEvents(List<ChatMember> memberList) {
+        UUID chatId = memberList.get(0).getChatId();
+        List<UUID> userIdList = memberList.stream().map(ChatMember::getUserId).toList();
+        eventRecipientRepository.deleteChatEventRecipients(chatId, userIdList);
+        eventRepository.deleteEmptyChatEvents(chatId);
     }
 
 }

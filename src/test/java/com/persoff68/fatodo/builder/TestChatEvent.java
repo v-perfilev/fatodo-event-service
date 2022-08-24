@@ -2,6 +2,7 @@ package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.ChatEvent;
 import com.persoff68.fatodo.model.ChatEventUser;
+import com.persoff68.fatodo.model.event.ChatReaction;
 import lombok.Builder;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class TestChatEvent extends ChatEvent {
 
     @Builder
-    public TestChatEvent(UUID id, UUID userId, UUID chatId, UUID messageId, String reaction,
+    public TestChatEvent(UUID id, UUID userId, UUID chatId, UUID messageId, ChatReaction.ReactionType reaction,
                          List<ChatEventUser> users) {
         super();
         super.setId(id);

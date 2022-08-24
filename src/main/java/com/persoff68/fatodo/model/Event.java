@@ -2,6 +2,7 @@ package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.model.constant.EventType;
+import com.persoff68.fatodo.model.dto.EventDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,23 +14,27 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "ftd_event")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Event extends AbstractAuditingModel implements Serializable {
+public class Event extends AbstractModel implements Serializable {
     @Serial
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @Enumerated(EnumType.STRING)
     private EventType type;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date = new Date();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<EventUser> users;
@@ -49,11 +54,12 @@ public class Event extends AbstractAuditingModel implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     private ReminderEvent reminderEvent;
 
-    public Event(EventType type, List<UUID> userIdList) {
-        this.type = type;
-        this.users = userIdList != null
-                ? userIdList.stream().distinct().map(userId -> new EventUser(this, userId)).toList()
-                : Collections.emptyList();
+    public Event(EventDTO eventDTO) {
+        this.type = eventDTO.getType();
+        this.users = eventDTO.getUserIds().stream().distinct()
+                .map(userId -> new EventUser(this, userId))
+                .toList();
+        this.date = eventDTO.getDate();
     }
 
 }

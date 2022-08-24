@@ -8,15 +8,17 @@ import java.util.UUID;
 public class TestContactEvent extends ContactEvent {
 
     @Builder
-    public TestContactEvent(UUID id, UUID firstUserId, UUID secondUserId) {
+    public TestContactEvent(UUID id, UUID userId, UUID firstUserId, UUID secondUserId) {
         super();
         super.setId(id);
+        super.setUserId(userId);
         super.setFirstUserId(firstUserId);
         super.setSecondUserId(secondUserId);
     }
 
     public static TestContactEventBuilder defaultBuilder() {
         return TestContactEvent.builder()
+                .userId(UUID.randomUUID())
                 .firstUserId(UUID.randomUUID())
                 .secondUserId(UUID.randomUUID());
     }
@@ -24,6 +26,7 @@ public class TestContactEvent extends ContactEvent {
     public ContactEvent toParent() {
         ContactEvent contactEvent = new ContactEvent();
         contactEvent.setId(getId());
+        contactEvent.setUserId(getUserId());
         contactEvent.setFirstUserId(getFirstUserId());
         contactEvent.setSecondUserId(getSecondUserId());
         return contactEvent;

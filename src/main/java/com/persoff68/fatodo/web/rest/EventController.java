@@ -24,7 +24,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity<Void> addEvent(@Valid @RequestBody EventDTO eventDTO) {
         EventService eventService = eventServiceFactory.create(eventDTO.getType());
-        eventService.addEvent(eventDTO.getUserIds(), eventDTO.getType(), eventDTO.getPayload());
+        eventService.addEvent(eventDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

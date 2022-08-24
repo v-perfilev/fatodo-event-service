@@ -27,7 +27,7 @@ public class EventConsumer {
     @KafkaListener(topics = EVENT_TOPIC, containerFactory = "eventContainerFactory")
     public void addEvent(@Payload EventDTO eventDTO) {
         EventService eventService = eventServiceFactory.create(eventDTO.getType());
-        eventService.addEvent(eventDTO.getUserIds(), eventDTO.getType(), eventDTO.getPayload());
+        eventService.addEvent(eventDTO);
         resetLatch();
     }
 

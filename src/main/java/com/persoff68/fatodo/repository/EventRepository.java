@@ -20,14 +20,14 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             select e from Event e
             join EventUser u on e.id = u.event.id
             where u.userId = :userId
-            order by e.createdAt desc
+            order by e.date desc
             """)
     Page<Event> findAllByUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("""
             select count(e) from Event e
             join EventUser u on e.id = u.event.id
-            where u.userId = :userId and e.createdAt > :from
+            where u.userId = :userId and e.date > :from
             """)
     long countFromByUserId(@Param("userId") UUID userId, @Param("from") Date from);
 

@@ -1,6 +1,9 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
+import com.persoff68.fatodo.model.event.Chat;
+import com.persoff68.fatodo.model.event.ChatMember;
+import com.persoff68.fatodo.model.event.ChatReaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,6 +11,8 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -41,7 +46,8 @@ public class ChatEvent extends AbstractModel implements Serializable {
 
     private UUID messageId;
 
-    private String reaction;
+    @Enumerated(EnumType.STRING)
+    private ChatReaction.ReactionType reaction;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "chatEvent")
     private List<ChatEventUser> users;
@@ -55,6 +61,36 @@ public class ChatEvent extends AbstractModel implements Serializable {
         this.users = userIdList != null
                 ? userIdList.stream().distinct().map(id -> new ChatEventUser(this, id)).toList()
                 : Collections.emptyList();
+    }
+
+    public static ChatEvent of(Chat chat, UUID userId, Event event) {
+        ChatEvent chatEvent = new ChatEvent();
+        chatEvent.event = event;
+        chatEvent.userId = userId;
+        chatEvent.chatId = chat.getId();
+        return chatEvent;
+    }
+
+    public static ChatEvent of(List<ChatMember> memberList, UUID userId, Event event) {
+        ChatEvent chatEvent = new ChatEvent();
+        chatEvent.event = event;
+        chatEvent.userId = userId;
+        chatEvent.chatId = memberList.get(0).getChatId();
+        chatEvent.users = memberList.stream()
+                .distinct()
+                .map(member -> new ChatEventUser(chatEvent, member.getUserId()))
+                .toList();
+        return chatEvent;
+    }
+
+    public static ChatEvent of(ChatReaction reaction, UUID userId, Event event) {
+        ChatEvent chatEvent = new ChatEvent();
+        chatEvent.event = event;
+        chatEvent.userId = userId;
+        chatEvent.chatId = reaction.getChatId();
+        chatEvent.messageId = reaction.getMessageId();
+        chatEvent.reaction = reaction.getType();
+        return chatEvent;
     }
 
 }

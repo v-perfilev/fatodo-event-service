@@ -1,12 +1,9 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.model.constant.EventType;
-
-import java.util.List;
-import java.util.UUID;
+import com.persoff68.fatodo.model.dto.EventDTO;
 
 public interface EventService {
 
-    void addEvent(List<UUID> userIdList, EventType type, Object payload);
+    void addEvent(EventDTO eventDTO);
 
 }

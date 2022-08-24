@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.model.CommentEvent;
+import com.persoff68.fatodo.model.event.CommentReaction;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -8,7 +9,8 @@ import java.util.UUID;
 public class TestCommentEvent extends CommentEvent {
 
     @Builder
-    public TestCommentEvent(UUID id, UUID userId, UUID parentId, UUID targetId, UUID commentId, String reaction) {
+    public TestCommentEvent(UUID id, UUID userId, UUID parentId, UUID targetId, UUID commentId,
+                            CommentReaction.ReactionType reaction) {
         super();
         super.setId(id);
         super.setUserId(userId);

@@ -5,7 +5,6 @@ import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.ItemEventUser;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 

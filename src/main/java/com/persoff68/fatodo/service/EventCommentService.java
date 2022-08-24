@@ -1,13 +1,15 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.model.CommentEvent;
+import com.persoff68.fatodo.model.Event;
+import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.event.Comment;
+import com.persoff68.fatodo.model.event.CommentReaction;
 import com.persoff68.fatodo.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -15,22 +17,37 @@ import java.util.UUID;
 @Transactional
 public class EventCommentService implements EventService {
 
+    private final JsonService jsonService;
     private final EventRepository eventRepository;
-    private final EventRecipientRepository eventRecipientRepository;
 
-    public void addEvent(List<UUID> userIdList, EventType type, Object payload) {
-        switch (type) {
-            case COMMENT_CREATE -> addCommentCreate(userIdList, type, payload);
-            case COMMENT_REACTION_INCOMING -> addCommentReactionIncoming(userIdList, type, payload);
+    public void addEvent(EventDTO eventDTO) {
+        switch (eventDTO.getType()) {
+            case COMMENT_CREATE -> addCommentEvent(eventDTO);
+            case COMMENT_REACTION_INCOMING -> addCommentReactionEvent(eventDTO);
         }
     }
 
-    private void addCommentCreate(List<UUID> userIdList, EventType type, Object payload) {
-
+    private void addCommentEvent(EventDTO eventDTO) {
+        Comment comment = jsonService.deserialize(eventDTO.getPayload(), Comment.class);
+        Event event = new Event(eventDTO);
+        CommentEvent commentEvent = CommentEvent.of(comment, eventDTO.getUserId(), event);
+        event.setCommentEvent(commentEvent);
+        eventRepository.save(event);
     }
 
-    private void addCommentReactionIncoming(List<UUID> userIdList, EventType type, Object payload) {
-
+    private void addCommentReactionEvent(EventDTO eventDTO) {
+        CommentReaction reaction = jsonService.deserialize(eventDTO.getPayload(), CommentReaction.class);
+        if (reaction.getType().equals(CommentReaction.ReactionType.NONE)) {
+            UUID userId = reaction.getUserId();
+            UUID targetId = reaction.getTargetId();
+            UUID commentId = reaction.getCommentId();
+            eventRepository.deleteCommentReaction(userId, targetId, commentId);
+        } else {
+            Event event = new Event(eventDTO);
+            CommentEvent commentEvent = CommentEvent.of(reaction, eventDTO.getUserId(), event);
+            event.setCommentEvent(commentEvent);
+            eventRepository.save(event);
+        }
     }
 
 }

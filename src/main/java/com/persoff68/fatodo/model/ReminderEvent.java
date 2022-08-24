@@ -1,6 +1,8 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
+import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.event.Reminder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,14 @@ public class ReminderEvent extends AbstractModel implements Serializable {
         this.event = event;
         this.groupId = reminderEvent.groupId;
         this.itemId = reminderEvent.itemId;
+    }
+
+    public static ReminderEvent of(Reminder reminder, Event event){
+        ReminderEvent reminderEvent = new ReminderEvent();
+        reminderEvent.event = event;
+        reminderEvent.groupId = reminder.getParentId();
+        reminderEvent.itemId = reminder.getTargetId();
+        return reminderEvent;
     }
 
 }

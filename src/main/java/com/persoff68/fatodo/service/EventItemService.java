@@ -30,10 +30,10 @@ public class EventItemService implements EventService {
             case ITEM_GROUP_DELETE -> deleteItemGroupEvent(eventDTO);
             case ITEM_CREATE, ITEM_UPDATE, ITEM_UPDATE_STATUS, ITEM_UPDATE_ARCHIVED -> addItemEvent(eventDTO);
             case ITEM_DELETE -> deleteItemEvent(eventDTO);
-            case ITEM_MEMBER_ADD -> addItemMemberAdd(eventDTO);
-            case ITEM_MEMBER_DELETE -> addItemMemberDelete(eventDTO);
-            case ITEM_MEMBER_LEAVE -> addItemMemberLeave(eventDTO);
-            case ITEM_MEMBER_ROLE -> addItemMemberRole(eventDTO);
+            case ITEM_MEMBER_ADD -> addItemMemberAddEvent(eventDTO);
+            case ITEM_MEMBER_DELETE -> addItemMemberDeleteEvent(eventDTO);
+            case ITEM_MEMBER_LEAVE -> addItemMemberLeaveEvent(eventDTO);
+            case ITEM_MEMBER_ROLE -> addItemMemberRoleEvent(eventDTO);
         }
     }
 
@@ -69,14 +69,14 @@ public class EventItemService implements EventService {
         eventRepository.deleteReminderEventsByItemId(itemId);
     }
 
-    private void addItemMemberAdd(EventDTO eventDTO) {
+    private void addItemMemberAddEvent(EventDTO eventDTO) {
         List<ItemGroupMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ItemGroupMember.class);
         if (!memberList.isEmpty()) {
             addMembersEvents(memberList, eventDTO);
         }
     }
 
-    private void addItemMemberDelete(EventDTO eventDTO) {
+    private void addItemMemberDeleteEvent(EventDTO eventDTO) {
         List<ItemGroupMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ItemGroupMember.class);
         if (!memberList.isEmpty()) {
             addMembersEvents(memberList, eventDTO);
@@ -84,14 +84,14 @@ public class EventItemService implements EventService {
         }
     }
 
-    private void addItemMemberLeave(EventDTO eventDTO) {
+    private void addItemMemberLeaveEvent(EventDTO eventDTO) {
         ItemGroupMember member = jsonService.deserialize(eventDTO.getPayload(), ItemGroupMember.class);
         List<ItemGroupMember> memberList = List.of(member);
         addMembersEvents(memberList, eventDTO);
         deleteMembersEvents(memberList);
     }
 
-    private void addItemMemberRole(EventDTO eventDTO) {
+    private void addItemMemberRoleEvent(EventDTO eventDTO) {
         ItemGroupMember member = jsonService.deserialize(eventDTO.getPayload(), ItemGroupMember.class);
         List<ItemGroupMember> memberList = List.of(member);
         addMembersEvents(memberList, eventDTO);

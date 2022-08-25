@@ -53,8 +53,8 @@ public class CommentEvent extends AbstractModel implements Serializable {
         commentEvent.event = event;
         commentEvent.userId = userId;
         commentEvent.parentId = comment.getParentId();
-        commentEvent.targetId = commentEvent.getTargetId();
-        commentEvent.commentId = commentEvent.getCommentId();
+        commentEvent.targetId = comment.getTargetId();
+        commentEvent.commentId = comment.getId();
         return commentEvent;
     }
 

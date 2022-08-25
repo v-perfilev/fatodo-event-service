@@ -27,10 +27,10 @@ public class EventChatService implements EventService {
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
             case CHAT_CREATE, CHAT_UPDATE -> addChatEvent(eventDTO);
-            case CHAT_MEMBER_ADD -> addChatMemberAdd(eventDTO);
-            case CHAT_MEMBER_DELETE -> addChatMemberDelete(eventDTO);
-            case CHAT_MEMBER_LEAVE -> addChatMemberLeave(eventDTO);
-            case CHAT_REACTION_INCOMING -> addChatReactionIncoming(eventDTO);
+            case CHAT_MEMBER_ADD -> addChatMemberAddEvent(eventDTO);
+            case CHAT_MEMBER_DELETE -> addChatMemberDeleteEvent(eventDTO);
+            case CHAT_MEMBER_LEAVE -> addChatMemberLeaveEvent(eventDTO);
+            case CHAT_REACTION_INCOMING -> addChatReactionIncomingEvent(eventDTO);
         }
     }
 
@@ -42,14 +42,14 @@ public class EventChatService implements EventService {
         eventRepository.save(event);
     }
 
-    public void addChatMemberAdd(EventDTO eventDTO) {
+    public void addChatMemberAddEvent(EventDTO eventDTO) {
         List<ChatMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ChatMember.class);
         if (!memberList.isEmpty()) {
             addMembersEvents(memberList, eventDTO);
         }
     }
 
-    public void addChatMemberDelete(EventDTO eventDTO) {
+    public void addChatMemberDeleteEvent(EventDTO eventDTO) {
         List<ChatMember> memberList = jsonService.deserializeList(eventDTO.getPayload(), ChatMember.class);
         if (!memberList.isEmpty()) {
             addMembersEvents(memberList, eventDTO);
@@ -57,14 +57,14 @@ public class EventChatService implements EventService {
         }
     }
 
-    public void addChatMemberLeave(EventDTO eventDTO) {
+    public void addChatMemberLeaveEvent(EventDTO eventDTO) {
         ChatMember member = jsonService.deserialize(eventDTO.getPayload(), ChatMember.class);
         List<ChatMember> memberList = List.of(member);
         addMembersEvents(memberList, eventDTO);
         deleteMembersEvents(memberList);
     }
 
-    public void addChatReactionIncoming(EventDTO eventDTO) {
+    public void addChatReactionIncomingEvent(EventDTO eventDTO) {
         ChatReaction reaction = jsonService.deserialize(eventDTO.getPayload(), ChatReaction.class);
         if (reaction.getType().equals(ChatReaction.ReactionType.NONE)) {
             UUID userId = reaction.getUserId();

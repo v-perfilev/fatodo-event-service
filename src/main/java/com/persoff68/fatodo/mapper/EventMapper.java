@@ -3,8 +3,9 @@ package com.persoff68.fatodo.mapper;
 import com.persoff68.fatodo.model.ChatEventUser;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.ItemEventUser;
-import com.persoff68.fatodo.model.dto.EventDTO;
+import com.persoff68.fatodo.model.dto.UserEventDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
@@ -15,10 +16,9 @@ import java.util.UUID;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EventMapper {
 
-    //TODO
-//    @Mapping(target = "itemEvent.userIds", source = "itemEvent.users", qualifiedByName = "itemUserIdsMapper")
-//    @Mapping(target = "chatEvent.userIds", source = "chatEvent.users", qualifiedByName = "chatUserIdsMapper")
-    EventDTO pojoToDTO(Event event);
+    @Mapping(target = "itemEvent.userIds", source = "itemEvent.users", qualifiedByName = "itemUserIdsMapper")
+    @Mapping(target = "chatEvent.userIds", source = "chatEvent.users", qualifiedByName = "chatUserIdsMapper")
+    UserEventDTO pojoToDTO(Event event);
 
     @Named("itemUserIdsMapper")
     static List<UUID> itemUserIdsMapper(List<ItemEventUser> itemEventUserList) {

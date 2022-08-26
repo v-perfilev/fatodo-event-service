@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,17 +50,6 @@ public class ChatEvent extends AbstractModel implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "chatEvent")
     private List<ChatEventUser> users;
-
-    public ChatEvent(Event event, ChatEvent chatEvent, List<UUID> userIdList) {
-        this.event = event;
-        this.userId = chatEvent.userId;
-        this.chatId = chatEvent.chatId;
-        this.messageId = chatEvent.messageId;
-        this.reaction = chatEvent.reaction;
-        this.users = userIdList != null
-                ? userIdList.stream().distinct().map(id -> new ChatEventUser(this, id)).toList()
-                : Collections.emptyList();
-    }
 
     public static ChatEvent of(Chat chat, UUID userId, Event event) {
         ChatEvent chatEvent = new ChatEvent();

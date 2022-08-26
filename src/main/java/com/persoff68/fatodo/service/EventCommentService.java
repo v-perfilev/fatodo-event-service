@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.event.Comment;
 import com.persoff68.fatodo.model.event.CommentReaction;
 import com.persoff68.fatodo.repository.EventRepository;
+import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class EventCommentService implements EventService {
         switch (eventDTO.getType()) {
             case COMMENT_CREATE -> addCommentEvent(eventDTO);
             case COMMENT_REACTION_INCOMING -> addCommentReactionEvent(eventDTO);
+            default -> throw new EventTypeException();
         }
     }
 

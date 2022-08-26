@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.event.ContactRequest;
 import com.persoff68.fatodo.repository.EventRepository;
+import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class EventContactService implements EventService {
             case CONTACT_ACCEPT_INCOMING, CONTACT_ACCEPT_OUTCOMING -> addContactRequestAcceptEvent(eventDTO);
             case CONTACT_DELETE_INCOMING, CONTACT_DELETE_OUTCOMING -> addContactRequestDeleteEvent(eventDTO);
             case CONTACT_DELETE -> deleteContactRelationEvents(eventDTO);
+            default -> throw new EventTypeException();
         }
     }
 

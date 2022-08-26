@@ -8,6 +8,7 @@ import com.persoff68.fatodo.model.event.ChatMember;
 import com.persoff68.fatodo.model.event.ChatReaction;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
+import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class EventChatService implements EventService {
             case CHAT_MEMBER_DELETE -> addChatMemberDeleteEvent(eventDTO);
             case CHAT_MEMBER_LEAVE -> addChatMemberLeaveEvent(eventDTO);
             case CHAT_REACTION_INCOMING -> addChatReactionIncomingEvent(eventDTO);
+            default -> throw new EventTypeException();
         }
     }
 

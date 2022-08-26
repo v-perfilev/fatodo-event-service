@@ -8,6 +8,7 @@ import com.persoff68.fatodo.model.event.ItemGroup;
 import com.persoff68.fatodo.model.event.ItemGroupMember;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
+import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class EventItemService implements EventService {
             case ITEM_MEMBER_DELETE -> addItemMemberDeleteEvent(eventDTO);
             case ITEM_MEMBER_LEAVE -> addItemMemberLeaveEvent(eventDTO);
             case ITEM_MEMBER_ROLE -> addItemMemberRoleEvent(eventDTO);
+            default -> throw new EventTypeException();
         }
     }
 

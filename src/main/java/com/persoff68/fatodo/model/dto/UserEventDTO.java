@@ -14,6 +14,8 @@ public class UserEventDTO extends AbstractDTO {
 
     private EventType type;
 
+    private Date date;
+
     private ContactEventDTO contactEvent;
 
     private ItemEventDTO itemEvent;
@@ -23,8 +25,6 @@ public class UserEventDTO extends AbstractDTO {
     private ChatEventDTO chatEvent;
 
     private ReminderEventDTO reminderEvent;
-
-    private Date createdAt;
 
 }
 

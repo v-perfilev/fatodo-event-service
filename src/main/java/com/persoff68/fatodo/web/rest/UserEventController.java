@@ -3,7 +3,6 @@ package com.persoff68.fatodo.web.rest;
 import com.persoff68.fatodo.mapper.EventMapper;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.PageableReadableList;
-import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.dto.UserEventDTO;
 import com.persoff68.fatodo.repository.OffsetPageRequest;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;

@@ -24,7 +24,7 @@ Contract.make {
                         consumer(anyNonBlankString()),
                         producer("WELCOME")
                 ),
-                "date"   : anyDate(),
+                "date"   : anyNumber(),
         ])
     }
     response {

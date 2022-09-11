@@ -28,7 +28,6 @@ import com.persoff68.fatodo.model.event.ItemGroupMember;
 import com.persoff68.fatodo.model.event.Reminder;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
-import com.persoff68.fatodo.repository.ReadStatusRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,15 +55,12 @@ class EventControllerIT {
     @Autowired
     EventRecipientRepository eventRecipientRepository;
     @Autowired
-    ReadStatusRepository readStatusRepository;
-    @Autowired
     ObjectMapper objectMapper;
 
     @AfterEach
     void cleanup() {
         eventRepository.deleteAll();
         eventRecipientRepository.deleteAll();
-        readStatusRepository.deleteAll();
     }
 
 

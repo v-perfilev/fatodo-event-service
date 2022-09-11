@@ -9,7 +9,7 @@
     <include file="db/changelog/20220708190200_create_item_event_schema.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/20220708190300_create_comment_event_schema.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/20220708190400_create_chat_event_schema.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/20220709120000_create_read_status_schema.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/20220710140000_create_reminder_event_schema.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/20220911210000_create_event_status_schema.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

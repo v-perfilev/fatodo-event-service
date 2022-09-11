@@ -9,12 +9,10 @@ import com.persoff68.fatodo.builder.TestEventUser;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.PageableReadableList;
-import com.persoff68.fatodo.model.ReadStatus;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.model.dto.UserEventDTO;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
-import com.persoff68.fatodo.repository.ReadStatusRepository;
 import com.persoff68.fatodo.service.UserEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +23,6 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +37,7 @@ class UserEventControllerIT {
 
     private static final String ENDPOINT = "/api/user-event";
 
-    private static final String USER_ID = "3c300277-b5ea-48d1-80db-ead620cf5846";
+    private static final String USER_ID_1 = "3c300277-b5ea-48d1-80db-ead620cf5846";
 
     @Autowired
     MockMvc mvc;
@@ -54,24 +49,21 @@ class UserEventControllerIT {
     @Autowired
     EventRecipientRepository eventRecipientRepository;
     @Autowired
-    ReadStatusRepository readStatusRepository;
-    @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
         eventRepository.deleteAll();
         eventRecipientRepository.deleteAll();
-        readStatusRepository.deleteAll();
 
-        Event event1 = buildEvent(USER_ID);
-        Event event2 = buildEvent(USER_ID);
+        Event event1 = buildEvent(USER_ID_1);
+        Event event2 = buildEvent(USER_ID_1);
         eventRepository.save(event1);
         eventRepository.save(event2);
     }
 
     @Test
-    @WithCustomSecurityContext(id = USER_ID)
+    @WithCustomSecurityContext(id = USER_ID_1)
     void testGetEventsPageable_ok_withoutParams() throws Exception {
         ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
@@ -81,11 +73,11 @@ class UserEventControllerIT {
         PageableReadableList<UserEventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(2);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isZero();
+        assertThat(dtoList.getUnread()).isEqualTo(2);
     }
 
     @Test
-    @WithCustomSecurityContext(id = USER_ID)
+    @WithCustomSecurityContext(id = USER_ID_1)
     void testGetEventsPageable_ok_withParams() throws Exception {
         String url = ENDPOINT + "?offset=1&size=10";
         ResultActions resultActions = mvc.perform(get(url))
@@ -96,7 +88,7 @@ class UserEventControllerIT {
         PageableReadableList<UserEventDTO> dtoList = objectMapper.readValue(resultString, javaType);
         assertThat(dtoList.getData()).hasSize(1);
         assertThat(dtoList.getCount()).isEqualTo(2);
-        assertThat(dtoList.getUnread()).isZero();
+        assertThat(dtoList.getUnread()).isEqualTo(2);
     }
 
     @Test
@@ -107,7 +99,7 @@ class UserEventControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = USER_ID)
+    @WithCustomSecurityContext(id = USER_ID_1)
     void testUnreadCount_ok_unread() throws Exception {
         String url = ENDPOINT + "/unread";
         ResultActions resultActions = mvc.perform(get(url))
@@ -118,7 +110,7 @@ class UserEventControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = USER_ID)
+    @WithCustomSecurityContext(id = USER_ID_1)
     void testUnreadCount_ok_read() throws Exception {
         String refreshUrl = ENDPOINT + "/refresh";
         mvc.perform(put(refreshUrl))
@@ -141,22 +133,13 @@ class UserEventControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = USER_ID)
+    @WithCustomSecurityContext(id = USER_ID_1)
     void testRefresh_ok() throws Exception {
         String url = ENDPOINT + "/refresh";
         mvc.perform(put(url))
                 .andExpect(status().isOk());
 
-        ReadStatus readStatus = readStatusRepository.findByUserId(UUID.fromString(USER_ID)).orElse(null);
-        Instant before = Instant.now().minus(10, ChronoUnit.SECONDS);
-        Instant after = Instant.now().plus(10, ChronoUnit.SECONDS);
-
-        assertThat(readStatus).isNotNull();
-        assertThat(readStatus.getLastReadAt())
-                .matches(d -> d.after(Date.from(before)))
-                .matches(d -> d.before(Date.from(after)));
-
-        long unreadCount = userEventService.getUnreadCount(UUID.fromString(USER_ID));
+        long unreadCount = userEventService.getUnreadCount(UUID.fromString(USER_ID_1));
         assertThat(unreadCount).isZero();
     }
 

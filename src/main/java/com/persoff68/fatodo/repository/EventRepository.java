@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +24,21 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     Page<Event> findAllByUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("""
+            select e from Event e
+            join EventUser u on e.id = u.event.id
+            left join Status s on e.id = s.event.id and u.userId = s.userId
+            where u.userId = :userId and (e.userId <> u.userId or s is null)
+            """)
+    List<Event> getUnreadByUserId(@Param("userId") UUID userId);
+
+
+    @Query("""
             select count(e) from Event e
             join EventUser u on e.id = u.event.id
-            where u.userId = :userId and e.date > :from
+            left join Status s on e.id = s.event.id and u.userId = s.userId
+            where u.userId = :userId and (e.userId <> u.userId or s is null)
             """)
-    long countFromByUserId(@Param("userId") UUID userId, @Param("from") Date from);
+    long countUnreadByUserId(@Param("userId") UUID userId);
 
     @Modifying
     @Query("""

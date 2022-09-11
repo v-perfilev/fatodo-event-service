@@ -4,29 +4,28 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="00000000000006" author="persoff68">
+    <changeSet id="00000000000007" author="persoff68">
 
-        <createTable tableName="ftd_event_reminder">
-            <column name="id" type="binary(16)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
+        <createTable tableName="ftd_event_status">
 
             <column name="event_id" type="binary(16)">
-                <constraints foreignKeyName="fk_event_reminder_event" references="ftd_event(id)" deleteCascade="true"
-                             nullable="false"/>
+                <constraints primaryKey="true" foreignKeyName="fk_event_status_event" references="ftd_event(id)"
+                             deleteCascade="true" nullable="false"/>
             </column>
 
-            <column name="group_id" type="binary(16)">
+            <column name="user_id" type="binary(16)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(16)">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="item_id" type="binary(16)">
+            <column name="date" type="datetime">
                 <constraints nullable="false"/>
             </column>
 
         </createTable>
 
-        <createIndex indexName="index_event_reminder_event" tableName="ftd_event_reminder">
+        <createIndex indexName="index_event_status_event" tableName="ftd_event_status">
             <column name="event_id"/>
         </createIndex>
 

@@ -27,7 +27,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             select e from Event e
             join EventUser u on e.id = u.event.id
             left join Status s on e.id = s.event.id and u.userId = s.userId
-            where u.userId = :userId and (e.userId <> u.userId or s is null)
+            where s is null and (e.userId is null or e.userId <> u.userId) and u.userId = :userId
             """)
     List<Event> getUnreadByUserId(@Param("userId") UUID userId);
 
@@ -36,7 +36,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             select count(e) from Event e
             join EventUser u on e.id = u.event.id
             left join Status s on e.id = s.event.id and u.userId = s.userId
-            where u.userId = :userId and (e.userId <> u.userId or s is null)
+            where s is null and (e.userId is null or e.userId <> u.userId) and u.userId = :userId
             """)
     long countUnreadByUserId(@Param("userId") UUID userId);
 

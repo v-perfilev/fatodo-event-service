@@ -59,6 +59,18 @@ public class ChatEvent extends AbstractModel implements Serializable {
         return chatEvent;
     }
 
+    public static ChatEvent of(Chat chat, List<UUID> memberIdList, UUID userId, Event event) {
+        ChatEvent chatEvent = new ChatEvent();
+        chatEvent.event = event;
+        chatEvent.userId = userId;
+        chatEvent.chatId = chat.getId();
+        chatEvent.users = memberIdList.stream()
+                .distinct()
+                .map(memberId -> new ChatEventUser(chatEvent, memberId))
+                .toList();
+        return chatEvent;
+    }
+
     public static ChatEvent of(List<ChatMember> memberList, UUID userId, Event event) {
         ChatEvent chatEvent = new ChatEvent();
         chatEvent.event = event;

@@ -27,7 +27,8 @@ public class EventChatService implements EventService {
 
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
-            case CHAT_CREATE, CHAT_UPDATE -> addChatEvent(eventDTO);
+            case CHAT_CREATE -> addChatCreateEvent(eventDTO);
+            case CHAT_UPDATE -> addChatUpdateEvent(eventDTO);
             case CHAT_MEMBER_ADD -> addChatMemberAddEvent(eventDTO);
             case CHAT_MEMBER_DELETE -> addChatMemberDeleteEvent(eventDTO);
             case CHAT_MEMBER_LEAVE -> addChatMemberLeaveEvent(eventDTO);
@@ -36,7 +37,20 @@ public class EventChatService implements EventService {
         }
     }
 
-    public void addChatEvent(EventDTO eventDTO) {
+    public void addChatCreateEvent(EventDTO eventDTO) {
+        Chat chat = jsonService.deserialize(eventDTO.getPayload(), Chat.class);
+        Event event = new Event(eventDTO);
+        List<UUID> memberIdList = chat.getMembers().stream()
+                .filter(userId -> !userId.equals(eventDTO.getUserId()))
+                .toList();
+        if (memberIdList.size() > 0) {
+            ChatEvent chatEvent = ChatEvent.of(chat, memberIdList, eventDTO.getUserId(), event);
+            event.setChatEvent(chatEvent);
+            eventRepository.save(event);
+        }
+    }
+
+    public void addChatUpdateEvent(EventDTO eventDTO) {
         Chat chat = jsonService.deserialize(eventDTO.getPayload(), Chat.class);
         Event event = new Event(eventDTO);
         ChatEvent chatEvent = ChatEvent.of(chat, eventDTO.getUserId(), event);

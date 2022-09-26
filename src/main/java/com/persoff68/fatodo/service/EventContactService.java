@@ -31,7 +31,11 @@ public class EventContactService implements EventService {
     private void addContactRequestEvent(EventDTO eventDTO) {
         ContactRequest contactRequest = jsonService.deserialize(eventDTO.getPayload(), ContactRequest.class);
         Event event = new Event(eventDTO);
-        ContactEvent contactEvent = ContactEvent.of(contactRequest, eventDTO.getUserId(), event);
+        ContactEvent contactEvent = ContactEvent.of(
+                contactRequest.getRequesterId(),
+                contactRequest.getRecipientId(),
+                eventDTO.getUserId(),
+                event);
         event.setContactEvent(contactEvent);
         eventRepository.save(event);
     }
@@ -39,7 +43,11 @@ public class EventContactService implements EventService {
     private void addContactRequestAcceptEvent(EventDTO eventDTO) {
         ContactRequest contactRequest = jsonService.deserialize(eventDTO.getPayload(), ContactRequest.class);
         Event event = new Event(eventDTO);
-        ContactEvent contactEvent = ContactEvent.of(contactRequest, eventDTO.getUserId(), event);
+        ContactEvent contactEvent = ContactEvent.of(
+                contactRequest.getRecipientId(),
+                contactRequest.getRequesterId(),
+                eventDTO.getUserId(),
+                event);
         event.setContactEvent(contactEvent);
         eventRepository.deleteContactEvents(eventDTO.getUserIds());
         eventRepository.save(event);
@@ -48,7 +56,11 @@ public class EventContactService implements EventService {
     private void addContactRequestDeleteEvent(EventDTO eventDTO) {
         ContactRequest contactRequest = jsonService.deserialize(eventDTO.getPayload(), ContactRequest.class);
         Event event = new Event(eventDTO);
-        ContactEvent contactEvent = ContactEvent.of(contactRequest, eventDTO.getUserId(), event);
+        ContactEvent contactEvent = ContactEvent.of(
+                contactRequest.getRequesterId(),
+                contactRequest.getRecipientId(),
+                eventDTO.getUserId(),
+                event);
         event.setContactEvent(contactEvent);
         eventRepository.deleteContactEvents(eventDTO.getUserIds());
         eventRepository.save(event);

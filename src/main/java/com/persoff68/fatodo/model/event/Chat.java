@@ -17,7 +17,7 @@ public class Chat extends AbstractAuditingModel {
     @JsonProperty("isDirect")
     private boolean isDirect;
 
-    private List<UUID> members;
+    private List<ChatMember> members;
 
     ChatMessage lastMessage;
 

@@ -41,7 +41,8 @@ public class EventChatService implements EventService {
         Chat chat = jsonService.deserialize(eventDTO.getPayload(), Chat.class);
         Event event = new Event(eventDTO);
         List<UUID> memberIdList = chat.getMembers().stream()
-                .filter(userId -> !userId.equals(eventDTO.getUserId()))
+                .map(ChatMember::getUserId)
+                .filter(userId -> !userId.equals(event.getUserId()))
                 .toList();
         if (memberIdList.size() > 0) {
             ChatEvent chatEvent = ChatEvent.of(chat, memberIdList, eventDTO.getUserId(), event);

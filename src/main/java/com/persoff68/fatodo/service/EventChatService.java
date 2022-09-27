@@ -44,7 +44,7 @@ public class EventChatService implements EventService {
                 .map(ChatMember::getUserId)
                 .filter(userId -> !userId.equals(event.getUserId()))
                 .toList();
-        if (memberIdList.size() > 0) {
+        if (!memberIdList.isEmpty()) {
             ChatEvent chatEvent = ChatEvent.of(chat, memberIdList, eventDTO.getUserId(), event);
             event.setChatEvent(chatEvent);
             eventRepository.save(event);

@@ -67,7 +67,7 @@ public class Event extends AbstractModel implements Serializable {
         this.type = eventDTO.getType();
         this.userId = eventDTO.getUserId();
         this.users = eventDTO.getUserIds().stream().distinct()
-                .map(userId -> new EventUser(this, userId))
+                .map(id -> new EventUser(this, id))
                 .toList();
         this.date = eventDTO.getDate();
     }

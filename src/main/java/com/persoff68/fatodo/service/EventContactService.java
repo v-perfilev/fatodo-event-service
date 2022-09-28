@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -49,7 +52,8 @@ public class EventContactService implements EventService {
                 eventDTO.getUserId(),
                 event);
         event.setContactEvent(contactEvent);
-        eventRepository.deleteContactEvents(eventDTO.getUserIds());
+        List<UUID> userIdList = List.of(contactRequest.getRequesterId(), contactRequest.getRecipientId());
+        eventRepository.deleteContactEvents(userIdList);
         eventRepository.save(event);
     }
 
@@ -62,7 +66,8 @@ public class EventContactService implements EventService {
                 eventDTO.getUserId(),
                 event);
         event.setContactEvent(contactEvent);
-        eventRepository.deleteContactEvents(eventDTO.getUserIds());
+        List<UUID> userIdList = List.of(contactRequest.getRequesterId(), contactRequest.getRecipientId());
+        eventRepository.deleteContactEvents(userIdList);
         eventRepository.save(event);
     }
 

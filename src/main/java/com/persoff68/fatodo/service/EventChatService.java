@@ -83,12 +83,11 @@ public class EventChatService implements EventService {
 
     public void addChatReactionIncomingEvent(EventDTO eventDTO) {
         ChatReaction reaction = jsonService.deserialize(eventDTO.getPayload(), ChatReaction.class);
-        if (reaction.getType().equals(ChatReaction.ReactionType.NONE)) {
-            UUID userId = reaction.getUserId();
-            UUID chatId = reaction.getChatId();
-            UUID messageId = reaction.getMessageId();
-            eventRepository.deleteChatReaction(userId, chatId, messageId);
-        } else {
+        UUID userId = reaction.getUserId();
+        UUID chatId = reaction.getChatId();
+        UUID messageId = reaction.getMessageId();
+        eventRepository.deleteChatReaction(userId, chatId, messageId);
+        if (!reaction.getType().equals(ChatReaction.ReactionType.NONE)) {
             Event event = new Event(eventDTO);
             ChatEvent chatEvent = ChatEvent.of(reaction, eventDTO.getUserId(), event);
             event.setChatEvent(chatEvent);

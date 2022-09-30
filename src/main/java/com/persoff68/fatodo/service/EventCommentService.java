@@ -39,12 +39,11 @@ public class EventCommentService implements EventService {
 
     private void addCommentReactionEvent(EventDTO eventDTO) {
         CommentReaction reaction = jsonService.deserialize(eventDTO.getPayload(), CommentReaction.class);
-        if (reaction.getType().equals(CommentReaction.ReactionType.NONE)) {
-            UUID userId = reaction.getUserId();
-            UUID targetId = reaction.getTargetId();
-            UUID commentId = reaction.getCommentId();
-            eventRepository.deleteCommentReaction(userId, targetId, commentId);
-        } else {
+        UUID userId = reaction.getUserId();
+        UUID targetId = reaction.getTargetId();
+        UUID commentId = reaction.getCommentId();
+        eventRepository.deleteCommentReaction(userId, targetId, commentId);
+        if (!reaction.getType().equals(CommentReaction.ReactionType.NONE)) {
             Event event = new Event(eventDTO);
             CommentEvent commentEvent = CommentEvent.of(reaction, eventDTO.getUserId(), event);
             event.setCommentEvent(commentEvent);

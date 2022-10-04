@@ -111,13 +111,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Modifying
     @Query("""
             delete from Event e
-            where exists (select 1 from ChatEvent c where e.id = c.event.id and c.chatId = :chatId)
-            """)
-    void deleteChatEvents(@Param("chatId") UUID chatId);
-
-    @Modifying
-    @Query("""
-            delete from Event e
             where exists (select 1 from ReminderEvent r where e.id = r.event.id and r.groupId = :groupId)
             """)
     void deleteReminderEventsByGroupId(@Param("groupId") UUID groupId);
@@ -135,7 +128,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             where e.type in com.persoff68.fatodo.model.constant.EventType.CHAT_REACTION_INCOMING
             and exists (select 1 from ChatEvent c where e.id = c.event.id
                 and c.userId = :userId and c.chatId = :chatId and c.messageId = :messageId)
-            and e.users.size = 0
             """)
     void deleteChatReaction(@Param("userId") UUID userId, @Param("chatId") UUID chatId,
                             @Param("messageId") UUID messageId);
@@ -146,7 +138,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             where e.type in com.persoff68.fatodo.model.constant.EventType.COMMENT_REACTION_INCOMING
             and exists (select 1 from CommentEvent c where e.id = c.event.id
                 and c.userId = :userId and c.targetId = :targetId and c.commentId = :commentId)
-            and e.users.size = 0
             """)
     void deleteCommentReaction(@Param("userId") UUID userId, @Param("targetId") UUID targetId,
                                @Param("commentId") UUID commentId);

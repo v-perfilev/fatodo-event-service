@@ -13,7 +13,7 @@ import com.persoff68.fatodo.builder.event.TestContactRequest;
 import com.persoff68.fatodo.builder.event.TestItem;
 import com.persoff68.fatodo.builder.event.TestItemGroup;
 import com.persoff68.fatodo.builder.event.TestItemGroupMember;
-import com.persoff68.fatodo.builder.event.TestReminder;
+import com.persoff68.fatodo.builder.event.TestReminderMeta;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.event.Chat;
@@ -25,7 +25,7 @@ import com.persoff68.fatodo.model.event.ContactRequest;
 import com.persoff68.fatodo.model.event.Item;
 import com.persoff68.fatodo.model.event.ItemGroup;
 import com.persoff68.fatodo.model.event.ItemGroupMember;
-import com.persoff68.fatodo.model.event.Reminder;
+import com.persoff68.fatodo.model.event.ReminderMeta;
 import com.persoff68.fatodo.repository.EventRecipientRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -385,8 +385,8 @@ class EventControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testAddReminderEvent() throws Exception {
-        Reminder reminder = TestReminder.defaultBuilder().build().toParent();
-        String payload = objectMapper.writeValueAsString(reminder);
+        ReminderMeta reminderMeta = TestReminderMeta.defaultBuilder().build().toParent();
+        String payload = objectMapper.writeValueAsString(reminderMeta);
         EventDTO eventDTO = TestEventDTO.defaultBuilder()
                 .type(EventType.REMINDER).payload(payload).build().toParent();
         String body = objectMapper.writeValueAsString(eventDTO);

@@ -35,6 +35,7 @@ public enum EventType {
     CONTACT_DELETE,
 
     COMMENT_CREATE,
+    COMMENT_DELETE,
     COMMENT_REACTION_INCOMING,
 
     REMINDER;
@@ -59,7 +60,7 @@ public enum EventType {
     }
 
     public boolean isCommentEvent() {
-        List<EventType> eventList = List.of(COMMENT_CREATE, COMMENT_REACTION_INCOMING);
+        List<EventType> eventList = List.of(COMMENT_CREATE, COMMENT_DELETE, COMMENT_REACTION_INCOMING);
         return eventList.contains(this);
     }
 

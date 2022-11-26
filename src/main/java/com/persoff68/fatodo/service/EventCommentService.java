@@ -24,6 +24,7 @@ public class EventCommentService implements EventService {
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
             case COMMENT_CREATE -> addCommentEvent(eventDTO);
+            case COMMENT_DELETE -> deleteCommentEvent(eventDTO);
             case COMMENT_REACTION_INCOMING -> addCommentReactionEvent(eventDTO);
             default -> throw new EventTypeException();
         }
@@ -35,6 +36,11 @@ public class EventCommentService implements EventService {
         CommentEvent commentEvent = CommentEvent.of(comment, eventDTO.getUserId(), event);
         event.setCommentEvent(commentEvent);
         eventRepository.save(event);
+    }
+
+    private void deleteCommentEvent(EventDTO eventDTO) {
+        Comment comment = jsonService.deserialize(eventDTO.getPayload(), Comment.class);
+        eventRepository.deleteCommentEventsByCommentId(comment.getId());
     }
 
     private void addCommentReactionEvent(EventDTO eventDTO) {

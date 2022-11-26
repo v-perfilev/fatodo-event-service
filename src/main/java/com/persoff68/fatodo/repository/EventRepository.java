@@ -111,6 +111,13 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Modifying
     @Query("""
             delete from Event e
+            where exists (select 1 from CommentEvent c where e.id = c.event.id and c.commentId = :commentId)
+            """)
+    void deleteCommentEventsByCommentId(@Param("commentId") UUID commentId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
             where exists (select 1 from ReminderEvent r where e.id = r.event.id and r.groupId = :groupId)
             """)
     void deleteReminderEventsByGroupId(@Param("groupId") UUID groupId);

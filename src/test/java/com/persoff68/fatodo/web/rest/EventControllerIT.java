@@ -197,7 +197,7 @@ class EventControllerIT {
         ContactRequest contactRequest = TestContactRequest.defaultBuilder().build().toParent();
         String payload = objectMapper.writeValueAsString(contactRequest);
         EventDTO eventDTO = TestEventDTO.defaultBuilder()
-                .type(EventType.CONTACT_REQUEST_INCOMING).payload(payload).build().toParent();
+                .type(EventType.CONTACT_REQUEST).payload(payload).build().toParent();
         String body = objectMapper.writeValueAsString(eventDTO);
         mvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -211,7 +211,7 @@ class EventControllerIT {
         ContactRequest contactRequest = TestContactRequest.defaultBuilder().build().toParent();
         String payload = objectMapper.writeValueAsString(contactRequest);
         EventDTO eventDTO = TestEventDTO.defaultBuilder()
-                .type(EventType.CONTACT_ACCEPT_INCOMING).payload(payload).build().toParent();
+                .type(EventType.CONTACT_ACCEPT).payload(payload).build().toParent();
         String body = objectMapper.writeValueAsString(eventDTO);
         mvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -225,7 +225,7 @@ class EventControllerIT {
         ContactRequest contactRequest = TestContactRequest.defaultBuilder().build().toParent();
         String payload = objectMapper.writeValueAsString(contactRequest);
         EventDTO eventDTO = TestEventDTO.defaultBuilder()
-                .type(EventType.CONTACT_DELETE_INCOMING).payload(payload).build().toParent();
+                .type(EventType.CONTACT_DECLINE).payload(payload).build().toParent();
         String body = objectMapper.writeValueAsString(eventDTO);
         mvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)

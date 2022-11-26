@@ -23,9 +23,9 @@ public class EventContactService implements EventService {
 
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
-            case CONTACT_REQUEST_INCOMING, CONTACT_REQUEST_OUTCOMING -> addContactRequestEvent(eventDTO);
-            case CONTACT_ACCEPT_INCOMING, CONTACT_ACCEPT_OUTCOMING -> addContactRequestAcceptEvent(eventDTO);
-            case CONTACT_DELETE_INCOMING, CONTACT_DELETE_OUTCOMING -> addContactRequestDeleteEvent(eventDTO);
+            case CONTACT_REQUEST -> addContactRequestEvent(eventDTO);
+            case CONTACT_ACCEPT -> addContactRequestAcceptEvent(eventDTO);
+            case CONTACT_DECLINE -> addContactRequestDeclineEvent(eventDTO);
             case CONTACT_DELETE -> deleteContactRelationEvents(eventDTO);
             default -> throw new EventTypeException();
         }
@@ -57,18 +57,8 @@ public class EventContactService implements EventService {
         eventRepository.save(event);
     }
 
-    private void addContactRequestDeleteEvent(EventDTO eventDTO) {
-        ContactRequest contactRequest = jsonService.deserialize(eventDTO.getPayload(), ContactRequest.class);
-        Event event = new Event(eventDTO);
-        ContactEvent contactEvent = ContactEvent.of(
-                contactRequest.getRequesterId(),
-                contactRequest.getRecipientId(),
-                eventDTO.getUserId(),
-                event);
-        event.setContactEvent(contactEvent);
-        List<UUID> userIdList = List.of(contactRequest.getRequesterId(), contactRequest.getRecipientId());
-        eventRepository.deleteContactEvents(userIdList);
-        eventRepository.save(event);
+    private void addContactRequestDeclineEvent(EventDTO eventDTO) {
+        eventRepository.deleteContactEvents(eventDTO.getUserIds());
     }
 
     private void deleteContactRelationEvents(EventDTO eventDTO) {

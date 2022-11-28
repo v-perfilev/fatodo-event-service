@@ -5,7 +5,7 @@ import com.persoff68.fatodo.builder.TestEventUser;
 import com.persoff68.fatodo.model.Event;
 import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.constant.EventType;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.repository.EventUserRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +30,7 @@ class ContractBase {
     @Autowired
     EventRepository eventRepository;
     @Autowired
-    EventRecipientRepository eventRecipientRepository;
+    EventUserRepository eventUserRepository;
 
     @BeforeEach
     void setup() {
@@ -43,7 +43,7 @@ class ContractBase {
     @AfterEach
     void cleanup() {
         eventRepository.deleteAll();
-        eventRecipientRepository.deleteAll();
+        eventUserRepository.deleteAll();
     }
 
     private Event buildEvent(String userId) {

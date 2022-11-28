@@ -11,7 +11,7 @@ import com.persoff68.fatodo.model.EventUser;
 import com.persoff68.fatodo.model.PageableReadableList;
 import com.persoff68.fatodo.model.constant.EventType;
 import com.persoff68.fatodo.model.dto.UserEventDTO;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.repository.EventUserRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.service.UserEventService;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,14 +47,14 @@ class UserEventControllerIT {
     @Autowired
     EventRepository eventRepository;
     @Autowired
-    EventRecipientRepository eventRecipientRepository;
+    EventUserRepository eventUserRepository;
     @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
         eventRepository.deleteAll();
-        eventRecipientRepository.deleteAll();
+        eventUserRepository.deleteAll();
 
         Event event1 = buildEvent(USER_ID_1);
         Event event2 = buildEvent(USER_ID_1);

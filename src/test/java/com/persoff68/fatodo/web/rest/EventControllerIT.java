@@ -26,7 +26,7 @@ import com.persoff68.fatodo.model.event.Item;
 import com.persoff68.fatodo.model.event.ItemGroup;
 import com.persoff68.fatodo.model.event.ItemGroupMember;
 import com.persoff68.fatodo.model.event.ReminderMeta;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.repository.EventUserRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -53,14 +53,14 @@ class EventControllerIT {
     @Autowired
     EventRepository eventRepository;
     @Autowired
-    EventRecipientRepository eventRecipientRepository;
+    EventUserRepository eventUserRepository;
     @Autowired
     ObjectMapper objectMapper;
 
     @AfterEach
     void cleanup() {
         eventRepository.deleteAll();
-        eventRecipientRepository.deleteAll();
+        eventUserRepository.deleteAll();
     }
 
 

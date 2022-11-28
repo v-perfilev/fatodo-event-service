@@ -6,7 +6,7 @@ import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.event.Item;
 import com.persoff68.fatodo.model.event.ItemGroup;
 import com.persoff68.fatodo.model.event.ItemGroupMember;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.repository.EventUserRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class EventItemService implements EventService {
 
     private final JsonService jsonService;
     private final EventRepository eventRepository;
-    private final EventRecipientRepository eventRecipientRepository;
+    private final EventUserRepository eventUserRepository;
 
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
@@ -109,11 +109,11 @@ public class EventItemService implements EventService {
     private void deleteMembersEvents(List<ItemGroupMember> memberList) {
         UUID groupId = memberList.get(0).getGroupId();
         List<UUID> userIdList = memberList.stream().map(ItemGroupMember::getUserId).toList();
-        eventRecipientRepository.deleteGroupEventRecipients(groupId, userIdList);
+        eventUserRepository.deleteGroupEventUsers(groupId, userIdList);
         eventRepository.deleteEmptyItemGroupEvents(groupId);
-        eventRecipientRepository.deleteCommentEventRecipients(groupId, userIdList);
+        eventUserRepository.deleteCommentEventUsers(groupId, userIdList);
         eventRepository.deleteEmptyCommentEvents(groupId);
-        eventRecipientRepository.deleteReminderEventRecipients(groupId, userIdList);
+        eventUserRepository.deleteReminderEventUsers(groupId, userIdList);
         eventRepository.deleteEmptyReminderEvents(groupId);
     }
 

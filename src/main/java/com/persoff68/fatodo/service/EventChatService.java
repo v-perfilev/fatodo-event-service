@@ -6,7 +6,7 @@ import com.persoff68.fatodo.model.dto.EventDTO;
 import com.persoff68.fatodo.model.event.Chat;
 import com.persoff68.fatodo.model.event.ChatMember;
 import com.persoff68.fatodo.model.event.ChatReaction;
-import com.persoff68.fatodo.repository.EventRecipientRepository;
+import com.persoff68.fatodo.repository.EventUserRepository;
 import com.persoff68.fatodo.repository.EventRepository;
 import com.persoff68.fatodo.service.exception.EventTypeException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class EventChatService implements EventService {
 
     private final JsonService jsonService;
     private final EventRepository eventRepository;
-    private final EventRecipientRepository eventRecipientRepository;
+    private final EventUserRepository eventUserRepository;
 
     public void addEvent(EventDTO eventDTO) {
         switch (eventDTO.getType()) {
@@ -105,7 +105,7 @@ public class EventChatService implements EventService {
     private void deleteMembersEvents(List<ChatMember> memberList) {
         UUID chatId = memberList.get(0).getChatId();
         List<UUID> userIdList = memberList.stream().map(ChatMember::getUserId).toList();
-        eventRecipientRepository.deleteChatEventRecipients(chatId, userIdList);
+        eventUserRepository.deleteChatEventUsers(chatId, userIdList);
         eventRepository.deleteEmptyChatEvents(chatId);
     }
 

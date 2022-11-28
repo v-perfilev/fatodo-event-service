@@ -51,6 +51,14 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Modifying
     @Query("""
             delete from Event e
+            where exists (select 1 from ContactEvent c where e.id = c.event.id
+            and (c.firstUserId = :userId or c.secondUserId = :userId))
+            """)
+    void deleteContactEventsByUserId(@Param("userId") UUID userId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
             where exists (select 1 from ItemEvent i where e.id = i.event.id and i.groupId = :groupId)
             and e.users.size = 0
             """)
@@ -148,5 +156,12 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             """)
     void deleteCommentReaction(@Param("userId") UUID userId, @Param("targetId") UUID targetId,
                                @Param("commentId") UUID commentId);
+
+    @Modifying
+    @Query("""
+            delete from Event e
+            where e.users.size = 0
+            """)
+    void deleteEmptyEvents();
 
 }

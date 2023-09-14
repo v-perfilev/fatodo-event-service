@@ -9,6 +9,7 @@ import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
 import com.persoff68.fatodo.service.UserEventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(UserEventController.ENDPOINT)
 @RequiredArgsConstructor
+@Slf4j
 public class UserEventController {
     static final String ENDPOINT = "/api/user-event";
 
@@ -38,12 +40,14 @@ public class UserEventController {
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer size
     ) {
+        long time = System.currentTimeMillis();
         UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         offset = Optional.ofNullable(offset).orElse(0);
         size = Optional.ofNullable(size).orElse(DEFAULT_SIZE);
         Pageable pageRequest = OffsetPageRequest.of(offset, size);
         PageableReadableList<Event> eventList = userEventService.getAllPageable(userId, pageRequest);
         PageableReadableList<UserEventDTO> dtoList = eventList.convert(eventMapper::pojoToDTO);
+        log.info("Get pageable (total): " + (System.currentTimeMillis() - time));
         return ResponseEntity.ok(dtoList);
     }
 

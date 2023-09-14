@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.Status;
 import com.persoff68.fatodo.model.constant.StatusType;
 import com.persoff68.fatodo.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,18 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserEventService {
 
     private final EventRepository eventRepository;
 
     @Transactional
     public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
+        long time = System.currentTimeMillis();
         Page<Event> eventPage = eventRepository.findAllByUserId(userId, pageable);
+        log.info("Get pageable (find all): " + (System.currentTimeMillis() - time));
         long unreadCount = eventRepository.countUnreadByUserId(userId);
+        log.info("Get pageable (unread count): " + (System.currentTimeMillis() - time));
         return PageableReadableList.of(eventPage.getContent(), eventPage.getTotalElements(), unreadCount);
     }
 

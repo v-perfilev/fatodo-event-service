@@ -24,11 +24,8 @@ public class UserEventService {
 
     @Transactional
     public PageableReadableList<Event> getAllPageable(UUID userId, Pageable pageable) {
-        long time = System.currentTimeMillis();
         Page<Event> eventPage = eventRepository.findAllByUserId(userId, pageable);
-        log.info("Get pageable (find all): " + (System.currentTimeMillis() - time));
         long unreadCount = eventRepository.countUnreadByUserId(userId);
-        log.info("Get pageable (unread count): " + (System.currentTimeMillis() - time));
         return PageableReadableList.of(eventPage.getContent(), eventPage.getTotalElements(), unreadCount);
     }
 

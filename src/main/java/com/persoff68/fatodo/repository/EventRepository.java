@@ -3,6 +3,7 @@ package com.persoff68.fatodo.repository;
 import com.persoff68.fatodo.model.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             where u.userId = :userId
             order by e.date desc
             """)
+    @EntityGraph(attributePaths = {"contactEvent", "itemEvent", "commentEvent", "chatEvent", "reminderEvent"})
     Page<Event> findAllByUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("""
